@@ -61,6 +61,36 @@ describe('Pronoun', () => {
         pronoun.should.equal('you');
     });
   });
+
+  describe('change person', () => {
+    it('should convert to 1st person', () => {
+      var pronoun = grandiloquent
+        .pronoun('he')
+        .toFirstPerson()
+        .toString();
+        pronoun.should.be.a('string');
+        pronoun.should.equal('I');
+    });
+
+    it('should convert to 2nd person', () => {
+      var pronoun = grandiloquent
+        .pronoun('we')
+        .toSecondPerson()
+        .toString();
+        pronoun.should.be.a('string');
+        pronoun.should.equal('you');
+    });
+
+    it('should convert to 3rd person', () => {
+      var pronoun = grandiloquent
+        .pronoun('I')
+        .setGender('or')
+        .toThirdPerson()
+        .toString();
+        pronoun.should.be.a('string');
+        pronoun.should.equal('he or she');
+    });
+  });
 });
 
 

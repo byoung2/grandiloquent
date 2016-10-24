@@ -28,6 +28,15 @@ pronoun.setGender('female'); //pronoun default gender for singular
 
 pronoun.toSingular();
 console.log(pronoun.toString()); //she
+
+//Methods are chainable
+let chain = grandiloquent
+  .pronoun('it')
+  .setGender('female') //she
+  .toPlural() //they
+  .toFirstPerson() //we
+
+console.log(pronoun.toString()); //we
 ```
 
 ### Verbs
@@ -42,6 +51,18 @@ console.log(verb.toString()); //walked
 
 verb.toFuture();
 console.log(verb.toString()); //will walk
+
+//You can pass an instance of grandiloquent.pronoun.model to verb methods
+let pronoun = grandiloquent
+  .pronoun('we')
+  .setGender('or')
+  .toSingular() //I
+  .toThirdPerson() //he or she
+
+let verb = grandiloquent
+  .verb('circumnavigate')
+  .toFuturePerfectProgressive(pronoun);
+console.log(verb.toString()); //he or she will have been circumnavigating
 ```
 
 ## License

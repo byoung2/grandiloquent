@@ -1,12 +1,12 @@
 {
   "name": "grandiloquent",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A grammar manupulation library",
   "author": "Bryan Young",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/fillerspace/grandiloquent.git"
+    "url": "git://github.com/byoung2/grandiloquent.git"
   },
   "main": "grandiloquent.js",
   "dependencies": {

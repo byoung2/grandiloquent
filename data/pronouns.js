@@ -56,6 +56,13 @@ const pronouns = [
     count: 2
   },
   {
+    pronoun: 'you',
+    person: 2,
+    type: 'subject',
+    gender: null,
+    count: 2
+  },
+  {
     pronoun: 'they',
     person: 3,
     type: 'subject',
