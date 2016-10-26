@@ -72,6 +72,103 @@ let verb = grandiloquent
 console.log(verb.toString()); //he or she will have been circumnavigating
 ```
 
+### Part of Speech Tagging (experimental)
+Grandiloquent includes an experimental pattern-based part of speech tagger. Using part of speech tokens described in the [Brown Corpus](https://en.wikipedia.org/wiki/Brown_Corpus) and a rules-based approach inspired by the [Brill Tagger](https://en.wikipedia.org/wiki/Brill_tagger), this tagger tests an approach that attempts to avoid a large lexicon file in favor of more pattern-based matching. Starting with a list of the top 2000 English words manually tagged, the tagger uses regular expressions to guess parts of speech for other words. Since some words can have more than one possible part of speech, patterns for groups of words are used to guess the most likely combination of tags.
+```js
+var sentence = grandiloquent
+  .sentence('My name is Jonas.');
+console.log(sentence.tagged);
+```
+Outputs
+```json
+[
+    {
+        "word": "My",
+        "index": 0,
+        "tags": {
+            "all": [
+                "PP$"
+            ],
+            "current": "PP$"
+        },
+        "meta": {
+            "pos": "possessive personal pronoun (my, our)",
+            "reason": "pattern",
+            "pattern": {
+                "0": "PP$",
+                "1": "NN",
+                "2": "VBZ"
+            }
+        }
+    },
+    {
+        "word": "name",
+        "index": 1,
+        "tags": {
+            "all": [
+                "NN",
+                "VB",
+                "JJ"
+            ],
+            "current": "NN"
+        },
+        "meta": {
+            "reason": "pattern",
+            "pos": "singular or mass noun",
+            "pattern": {
+                "0": "PP$",
+                "1": "NN",
+                "2": "VBZ"
+            }
+        }
+    },
+    {
+        "word": "is",
+        "index": 2,
+        "tags": {
+            "all": [
+                "VBZ"
+            ],
+            "current": "VBZ"
+        },
+        "meta": {
+            "pos": "verb, 3rd. singular present",
+            "reason": "pattern",
+            "pattern": {
+                "0": "PP$",
+                "1": "NN",
+                "2": "VBZ"
+            }
+        }
+    },
+    {
+        "word": "Jonas",
+        "index": 3,
+        "tags": {
+            "all": [
+                "NP"
+            ],
+            "current": "NP"
+        },
+        "meta": {
+            "pos": "proper noun or part of name phrase",
+            "reason": null
+        }
+    },
+    {
+        "word": ".",
+        "index": 4,
+        "tags": {
+            "all": [],
+            "current": null
+        },
+        "meta": {
+            "reason": null
+        }
+    }
+]
+```
+
 ## License
 
 Grandiloquent.js is freely distributable under the terms of the [MIT license](https://github.com/byoung2/grandiloquent/blob/master/LICENSE).

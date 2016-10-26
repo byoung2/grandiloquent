@@ -186,7 +186,7 @@ const lexicon = {
   know: ['VB'],
   were: ['VBD','VBN'],
   then: ['RB','JJ'],
-  my: ['PRP'],
+  my: ['PP$'],
   first: ['RB','JJ'],
   would: ['VB'],
   money: ['NN','JJ'],
@@ -2376,7 +2376,8 @@ const patterns = {
     [/^IN/, /^VB/, /^RB/],
     [/^ABL/, /^AT/, /^JJ/],
     [/^ABL/, /^JJ/, /^NNS/],
-    [/^CC/, /^PRP/, /^VB/]
+    [/^CC/, /^PRP/, /^VB/],
+    [/^PP\$/, /^NN/, /^VBZ/]
   ],
   4: [
     [/^CC/, /^PRP/, /^VB/, /^IN/],
