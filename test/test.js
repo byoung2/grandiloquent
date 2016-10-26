@@ -5,7 +5,7 @@ chai.should();
 describe('Pronoun', () => {
   describe('plural to singular', () => {
     it('should convert 3rd person pronoun', () => {
-      var pronoun = grandiloquent
+      let pronoun = grandiloquent
         .pronoun('they')
         .toSingular()
         .toString();
@@ -14,7 +14,7 @@ describe('Pronoun', () => {
     });
 
     it('should convert 3rd person female pronoun', () => {
-      var pronoun = grandiloquent
+      let pronoun = grandiloquent
         .pronoun('they')
         .setGender('female')
         .toSingular()
@@ -24,7 +24,7 @@ describe('Pronoun', () => {
     });
 
     it('should convert 3rd person male or female pronoun', () => {
-      var pronoun = grandiloquent
+      let pronoun = grandiloquent
         .pronoun('they')
         .setGender('or')
         .toSingular()
@@ -34,7 +34,7 @@ describe('Pronoun', () => {
     });
 
     it('should convert 3rd person male or female pronoun', () => {
-      var pronoun = grandiloquent
+      let pronoun = grandiloquent
         .pronoun('they')
         .setGender('slash')
         .toSingular()
@@ -44,7 +44,7 @@ describe('Pronoun', () => {
     });
 
     it('should convert 1st person pronoun', () => {
-      var pronoun = grandiloquent
+      let pronoun = grandiloquent
         .pronoun('we')
         .toSingular()
         .toString();
@@ -53,7 +53,7 @@ describe('Pronoun', () => {
     });
 
     it('should convert 2nd person pronoun', () => {
-      var pronoun = grandiloquent
+      let pronoun = grandiloquent
         .pronoun('you')
         .toSingular()
         .toString();
@@ -64,7 +64,7 @@ describe('Pronoun', () => {
 
   describe('change person', () => {
     it('should convert to 1st person', () => {
-      var pronoun = grandiloquent
+      let pronoun = grandiloquent
         .pronoun('he')
         .toFirstPerson()
         .toString();
@@ -73,7 +73,7 @@ describe('Pronoun', () => {
     });
 
     it('should convert to 2nd person', () => {
-      var pronoun = grandiloquent
+      let pronoun = grandiloquent
         .pronoun('we')
         .toSecondPerson()
         .toString();
@@ -82,7 +82,7 @@ describe('Pronoun', () => {
     });
 
     it('should convert to 3rd person', () => {
-      var pronoun = grandiloquent
+      let pronoun = grandiloquent
         .pronoun('I')
         .setGender('or')
         .toThirdPerson()
@@ -96,7 +96,7 @@ describe('Pronoun', () => {
 describe('Verb', () => {
   describe('base', () => {
     it('should convert singular 3rd person present tense regular verb to base form', () => {
-      var verb = grandiloquent
+      let verb = grandiloquent
         .verb('walks')
         .toBase()
         .toString();
@@ -105,7 +105,7 @@ describe('Verb', () => {
     });
 
     it('should convert singular 3rd person present tense regular verb to infinitive form', () => {
-      var verb = grandiloquent
+      let verb = grandiloquent
         .verb('walks')
         .toInfinitive()
         .toString();
@@ -114,7 +114,7 @@ describe('Verb', () => {
     });
 
     it('should convert base regular verb to present form', () => {
-      var verb = grandiloquent
+      let verb = grandiloquent
         .verb('walk')
         .toPresent()
         .toString();
@@ -123,7 +123,7 @@ describe('Verb', () => {
     });
 
     it('should convert base regular verb to future form', () => {
-      var verb = grandiloquent
+      let verb = grandiloquent
         .verb('walk')
         .toFuture()
         .toString();
@@ -132,7 +132,7 @@ describe('Verb', () => {
     });
 
     it('should convert base regular verb to past form', () => {
-      var verb = grandiloquent
+      let verb = grandiloquent
         .verb('walk')
         .toPast()
         .toString();
@@ -145,7 +145,7 @@ describe('Verb', () => {
 describe('Sentence', () => {
   describe('init', () => {
     it('should it a sentence without changing it', () => {
-      var sentence = grandiloquent
+      let sentence = grandiloquent
         .sentence('If you wanna be my lover, you gotta get with my friends.')
         .toString();
       sentence.should.be.a('string');
@@ -153,7 +153,7 @@ describe('Sentence', () => {
     });
 
     it('should normalize a sentence to prepare for tagging', () => {
-      var sentence = grandiloquent
+      let sentence = grandiloquent
         .sentence('If you wanna be my lover, you gotta get with my friends.');
       sentence.normalized.should.be.a('string');
       sentence.normalized.should.equal('If you want to be my lover , you got to get with my friends . ');
@@ -162,14 +162,14 @@ describe('Sentence', () => {
 
   describe('tokenize', () => {
     it('should split a sentence into words', () => {
-      var sentence = grandiloquent
+      let sentence = grandiloquent
         .sentence('If you wanna be my lover, you gotta get with my friends.');
       sentence.tagged.should.be.an('array');
       sentence.tagged.should.have.lengthOf(16);
     });
 
     it('should not split proper names', () => {
-      var sentence = grandiloquent
+      let sentence = grandiloquent
         .sentence('Are you the legal guardian of John Connor?');
       sentence.tagged.should.be.an('array');
       sentence.tagged.should.have.lengthOf(8);
@@ -180,31 +180,31 @@ describe('Sentence', () => {
 
   describe('meta', () => {
     it('should identify a question', () => {
-      var sentence = grandiloquent
+      let sentence = grandiloquent
         .sentence('Are you the legal guardian of John Connor?');
       sentence.isQuestion().should.be.true;
     });
 
     it('should not falsely identify a question', () => {
-      var sentence = grandiloquent
+      let sentence = grandiloquent
         .sentence('You are the legal guardian of John Connor.');
       sentence.isQuestion().should.be.false;
     });
 
     it('should identify a subordinate clause', () => {
-      var sentence = grandiloquent
+      let sentence = grandiloquent
         .sentence('I was sleeping when you came home.');
       sentence.hasSubordinateClause().should.be.true;
     });
 
     it('should identify a subordinate clause at the start of the sentence', () => {
-      var sentence = grandiloquent
+      let sentence = grandiloquent
         .sentence('When you came home, I was sleeping.');
       sentence.hasSubordinateClause().should.be.true;
     });
 
     it('should identify the main verb', () => {
-      var verb = grandiloquent
+      let verb = grandiloquent
         .sentence('While you walked to the car, I called Uber to pick me up.')
         .getMainVerb();
       verb.should.be.an.object;
@@ -212,7 +212,7 @@ describe('Sentence', () => {
     });
 
     it('should identify the main verb', () => {
-      var verb = grandiloquent
+      let verb = grandiloquent
         .sentence('I cannot understand why you called Uber to pick me up.')
         .getMainVerb();
       verb.should.be.an.object;
@@ -220,7 +220,7 @@ describe('Sentence', () => {
     });
 
     it('should identify the subject', () => {
-      var verb = grandiloquent
+      let verb = grandiloquent
         .sentence('I cannot understand why you called Uber to pick me up.')
         .getSubject();
       verb.should.be.an.object;
@@ -228,7 +228,7 @@ describe('Sentence', () => {
     });
 
     it('should identify the subject-verb phrase', () => {
-      var verb = grandiloquent
+      let verb = grandiloquent
         .sentence('I cannot understand why you called Uber to pick me up.')
         .getSubjectVerbPhrase();
       verb.should.be.a.string;
