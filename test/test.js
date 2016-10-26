@@ -185,16 +185,54 @@ describe('Sentence', () => {
       sentence.isQuestion().should.be.true;
     });
 
+    it('should not falsely identify a question', () => {
+      var sentence = grandiloquent
+        .sentence('You are the legal guardian of John Connor.');
+      sentence.isQuestion().should.be.false;
+    });
+
     it('should identify a subordinate clause', () => {
       var sentence = grandiloquent
         .sentence('I was sleeping when you came home.');
-      sentence.hasSubordinateClase().should.be.true;
+      sentence.hasSubordinateClause().should.be.true;
     });
 
     it('should identify a subordinate clause at the start of the sentence', () => {
       var sentence = grandiloquent
         .sentence('When you came home, I was sleeping.');
-      sentence.hasSubordinateClase().should.be.true;
+      sentence.hasSubordinateClause().should.be.true;
+    });
+
+    it('should identify the main verb', () => {
+      var verb = grandiloquent
+        .sentence('While you walked to the car, I called Uber to pick me up.')
+        .getMainVerb();
+      verb.should.be.an.object;
+      verb.should.have.property('word', 'called');
+    });
+
+    it('should identify the main verb', () => {
+      var verb = grandiloquent
+        .sentence('I cannot understand why you called Uber to pick me up.')
+        .getMainVerb();
+      verb.should.be.an.object;
+      verb.should.have.property('word', 'understand');
+    });
+
+    it('should identify the subject', () => {
+      var verb = grandiloquent
+        .sentence('I cannot understand why you called Uber to pick me up.')
+        .getSubject();
+      verb.should.be.an.object;
+      verb.should.have.property('word', 'I');
+    });
+
+    it('should identify the subject-verb phrase', () => {
+      var verb = grandiloquent
+        .sentence('I cannot understand why you called Uber to pick me up.')
+        .getSubjectVerbPhrase();
+      verb.should.be.a.string;
+      verb.should.equal('I can not understand');
     });
   });
 });
