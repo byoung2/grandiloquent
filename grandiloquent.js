@@ -17,6 +17,7 @@
 }(this, function () { 'use strict';
   return {
     verb: require('./lib/verb.js').instance,
-    pronoun: require('./lib/pronoun.js').instance
+    pronoun: require('./lib/pronoun.js').instance,
+    sentence: require('./lib/sentence.js').instance
   };
 }));

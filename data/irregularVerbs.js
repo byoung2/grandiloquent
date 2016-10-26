@@ -31,6 +31,19 @@ const irregularVerbs = {
     },
     pastParticiples: ['had'],
   },
+  'do': {
+    base: 'do',
+    present: {
+      singular: {
+        1: 'does'
+      },
+      default: 'do'
+    },
+    past: {
+      default: 'did'
+    },
+    pastParticiples: ['done'],
+  },
   'give': {
     base: 'give',
     past: {
