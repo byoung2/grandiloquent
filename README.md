@@ -168,6 +168,38 @@ Outputs
     }
 ]
 ```
+Get information about a sentence
+```js
+let sentence = grandiloquent
+  .sentence('Are you the legal guardian of John Connor?');
+
+console.log(sentence.isQuestion()); //true
+
+let sentence = grandiloquent
+  .sentence('I was sleeping when you came home.');
+
+console.log(sentence.hasSubordinateClause()); //true
+
+let verb = grandiloquent
+  .sentence('While you walked to the car, I called Uber to pick me up.')
+  .getMainVerb();
+
+console.log(verb.word); //called
+
+let verb = grandiloquent
+  .sentence('Fortunately most doctors agree that diet and exercise are good for your health.')
+  .getSubjectPhrase()
+  .toString();
+
+console.log(verb.word); //most doctors
+
+let verb = grandiloquent
+  .sentence('I cannot understand why you called Uber to pick me up.')
+  .getSubjectVerbPhrase()
+  .toString();
+
+console.log(verb.word); //I can not understand
+```
 
 ## License
 
