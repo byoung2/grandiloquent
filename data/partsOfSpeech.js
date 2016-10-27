@@ -2426,6 +2426,8 @@ module.exports = {
       pos.push('NN');
     } else if(word.match(/(ed)$/i)) {
       pos.push('VBN');
+    } else if(word.match(/(ly)$/i)) {
+      pos.push('RB');
     } else if(word.match(/(ing)$/i)) {
       pos.push('VBG');
     } else if(word.match(/(al)$/i)) {

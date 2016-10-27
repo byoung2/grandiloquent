@@ -139,6 +139,15 @@ describe('Verb', () => {
       verb.should.be.a('string');
       verb.should.equal('walked');
     });
+
+    it('should convert base regular verb to future perfect progressive form', () => {
+      let verb = grandiloquent
+        .verb('walk')
+        .toFuturePerfectProgressive()
+        .toString();
+      verb.should.be.a('string');
+      verb.should.equal('will have been walking');
+    });
   });
 });
 
@@ -227,12 +236,32 @@ describe('Sentence', () => {
       verb.should.have.property('word', 'I');
     });
 
+    it('should identify the subject phrase', () => {
+      let verb = grandiloquent
+        .sentence('Fortunately most doctors agree that diet and exercise are good for your health.')
+        .getSubjectPhrase()
+        .toString();
+      verb.should.be.a.string;
+      verb.should.equal('most doctors');
+    });
+
     it('should identify the subject-verb phrase', () => {
       let verb = grandiloquent
         .sentence('I cannot understand why you called Uber to pick me up.')
-        .getSubjectVerbPhrase();
+        .getSubjectVerbPhrase()
+        .toString();
+      verb.should.not.be.null;
       verb.should.be.a.string;
       verb.should.equal('I can not understand');
+    });
+
+    it('should identify the subject-verb phrase', () => {
+      let verb = grandiloquent
+        .sentence('Most doctors reluctantly agree that diet and exercise are good for your health.')
+        .getSubjectVerbPhrase()
+        .toString();
+      verb.should.be.a.string;
+      verb.should.equal('Most doctors reluctantly agree');
     });
   });
 });
