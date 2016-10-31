@@ -200,6 +200,36 @@ let verb = grandiloquent
 
 console.log(verb.word); //I can not understand
 ```
+Transform a sentence
+```js
+let sentence = grandiloquent
+  .sentence('I walked.')
+  .append('to the store')
+  .toString();
+
+console.log(sentence); //I walked to the store.
+
+let sentence = grandiloquent
+  .sentence('I walked to the store.')
+  .prepend('Yesterday')
+  .toString();
+
+console.log(sentence); //Yesterday I walked to the store.
+
+let sentence = grandiloquent
+  .sentence('I walked to the store.')
+  .insert('slowly', 2)
+  .toString();
+
+console.log(sentence); //I walked slowly to the store.
+
+let sentence = grandiloquent
+  .sentence('I walked to the store.')
+  .insert('slowly', {after: '$mainVerb'})
+  .toString();
+
+console.log(sentence); //I walked slowly to the store.
+```
 
 ## License
 

@@ -264,4 +264,60 @@ describe('Sentence', () => {
       verb.should.equal('Most doctors reluctantly agree');
     });
   });
+
+  describe('transform', () => {
+    it('should append text before punctuation', () => {
+      let sentence = grandiloquent
+        .sentence('I walked.')
+        .append('to the store')
+        .toString();
+      sentence.should.be.a.string;
+      sentence.should.equal('I walked to the store.');
+    });
+
+    it('should append text before punctuation', () => {
+      let sentence = grandiloquent
+        .sentence('I walked...')
+        .append('to the store')
+        .toString();
+      sentence.should.be.a.string;
+      sentence.should.equal('I walked to the store...');
+    });
+
+    it('should prepend text', () => {
+      let sentence = grandiloquent
+        .sentence('I walked to the store.')
+        .prepend('Yesterday')
+        .toString();
+      sentence.should.be.a.string;
+      sentence.should.equal('Yesterday I walked to the store.');
+    });
+
+    it('should insert text at a specific location', () => {
+      let sentence = grandiloquent
+        .sentence('I walked to the store')
+        .insert('slowly', 2)
+        .toString();
+      sentence.should.be.a.string;
+      sentence.should.equal('I walked slowly to the store');
+    });
+
+    it('should insert text at a location relative to a named tag', () => {
+      let sentence = grandiloquent
+        .sentence('I walked to the store')
+        .insert('slowly', {after: '$mainVerb'})
+        .toString();
+      sentence.should.be.a.string;
+      sentence.should.equal('I walked slowly to the store');
+    });
+
+    it('should insert text at a location relative to a named tag', () => {
+      let sentence = grandiloquent
+        .sentence('I walked to the store')
+        .insert('slowly', {before: '$mainVerb'})
+        .toString();
+      sentence.should.be.a.string;
+      sentence.should.equal('I slowly walked to the store');
+    });
+  });
 });
