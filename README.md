@@ -6,6 +6,16 @@
 > :  (adj.) Marked by fancy, extravagant, or pretentious speech, especially when trying to impress others.
 > :  (n.) A grammar parsing and manipulation library
 
+# Table of Contents
+1. [Install](#install)
+2. [Introduction](#introduction)
+3. [Pronouns](#pronouns)
+4. [Verbs](#verbs)
+5. [Part of Speech Tagging](#part-of-speech-tagging)
+6. [Sentence Meta](#sentence-meta)
+7. [Transform Sentences](#transform-sentences)
+8. [License](#license)
+
 ## Install
 
 ```sh
@@ -171,7 +181,7 @@ Outputs
 ]
 ```
 
-### Get information about a sentence
+### Sentence Meta
 ```js
 let sentence = grandiloquent
   .sentence('Are you the legal guardian of John Connor?');
@@ -204,7 +214,7 @@ let verb = grandiloquent
 console.log(verb.word); //I can not understand
 ```
 
-### Transform a sentence
+### Transform Sentences
 ```js
 let sentence = grandiloquent
   .sentence('I walked.')
