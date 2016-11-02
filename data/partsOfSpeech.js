@@ -98,7 +98,7 @@ const lexicon = {
   a: ['AT','NN','IN'],
   in: ['IN','RB'],
   is: ['VBZ'],
-  you: ['PRP','NN'],
+  you: ['PRP','PPSS'],
   are: ['VBP'],
   for: ['IN','CC'],
   that: ['DT','JJ','RP','CS'],
@@ -107,7 +107,7 @@ const lexicon = {
   as: ['RB','CC','PRP','IN'],
   be: ['VB','MD'],
   on: ['IN','RB','JJ'],
-  your: ['PRP'],
+  your: ['PP$'],
   with: ['IN'],
   can: ['MD','VB','NN'],
   have: ['VB','MD','VB'],
@@ -1905,7 +1905,7 @@ const lexicon = {
   waste: ['VB','JJ','NN'],
   wife: ['NN'],
   yellow: ['JJ','NN','VB'],
-  yours: ['PRP'],
+  yours: ['PPL$'],
   accident: ['NN'],
   airport: ['NN'],
   alive: ['JJ'],
@@ -2368,7 +2368,8 @@ const patterns = {
     [/^AT/, /^NN/],
     [/^TO/, /^VB/],
     [/^MD/, /^VB/],
-    [/^CD/, /^NNP/]
+    [/^CD/, /^NNS/],
+    [/^VB/, /^NN/]
   ],
   3: [
     [/^IN/, /^AT/, /^NN/],
@@ -2461,9 +2462,9 @@ module.exports = {
     } else if(word.match(/(rs)$/i)) {
       pos.push('NNS');
     } else if(word.match(/(as)$/i)) {
-      pos.push('NNP');
+      pos.push('NNS');
     } else if(word.match(/(s)$/i)) {
-      pos.push('NNP', 'VBZ');
+      pos.push('NNS', 'VBZ');
     }
 
     return pos;

@@ -2,155 +2,6 @@ const chai = require('chai');
 const grandiloquent = require('./../grandiloquent.js');
 chai.should();
 
-describe('Pronoun', () => {
-  describe('plural to singular', () => {
-    it('should convert 3rd person pronoun', () => {
-      let pronoun = grandiloquent
-        .pronoun('they')
-        .toSingular()
-        .toString();
-      pronoun.should.be.a('string');
-      pronoun.should.equal('he');
-    });
-
-    it('should convert 3rd person female pronoun', () => {
-      let pronoun = grandiloquent
-        .pronoun('they')
-        .setGender('female')
-        .toSingular()
-        .toString();
-      pronoun.should.be.a('string');
-      pronoun.should.equal('she');
-    });
-
-    it('should convert 3rd person male or female pronoun', () => {
-      let pronoun = grandiloquent
-        .pronoun('they')
-        .setGender('or')
-        .toSingular()
-        .toString();
-      pronoun.should.be.a('string');
-      pronoun.should.equal('he or she');
-    });
-
-    it('should convert 3rd person male or female pronoun', () => {
-      let pronoun = grandiloquent
-        .pronoun('they')
-        .setGender('slash')
-        .toSingular()
-        .toString();
-      pronoun.should.be.a('string');
-      pronoun.should.equal('he/she');
-    });
-
-    it('should convert 1st person pronoun', () => {
-      let pronoun = grandiloquent
-        .pronoun('we')
-        .toSingular()
-        .toString();
-      pronoun.should.be.a('string');
-      pronoun.should.equal('I');
-    });
-
-    it('should convert 2nd person pronoun', () => {
-      let pronoun = grandiloquent
-        .pronoun('you')
-        .toSingular()
-        .toString();
-      pronoun.should.be.a('string');
-      pronoun.should.equal('you');
-    });
-  });
-
-  describe('change person', () => {
-    it('should convert to 1st person', () => {
-      let pronoun = grandiloquent
-        .pronoun('he')
-        .toFirstPerson()
-        .toString();
-      pronoun.should.be.a('string');
-      pronoun.should.equal('I');
-    });
-
-    it('should convert to 2nd person', () => {
-      let pronoun = grandiloquent
-        .pronoun('we')
-        .toSecondPerson()
-        .toString();
-      pronoun.should.be.a('string');
-      pronoun.should.equal('you');
-    });
-
-    it('should convert to 3rd person', () => {
-      let pronoun = grandiloquent
-        .pronoun('I')
-        .setGender('or')
-        .toThirdPerson()
-        .toString();
-      pronoun.should.be.a('string');
-      pronoun.should.equal('he or she');
-    });
-  });
-});
-
-describe('Verb', () => {
-  describe('base', () => {
-    it('should convert singular 3rd person present tense regular verb to base form', () => {
-      let verb = grandiloquent
-        .verb('walks')
-        .toBase()
-        .toString();
-      verb.should.be.a('string');
-      verb.should.equal('walk');
-    });
-
-    it('should convert singular 3rd person present tense regular verb to infinitive form', () => {
-      let verb = grandiloquent
-        .verb('walks')
-        .toInfinitive()
-        .toString();
-      verb.should.be.a('string');
-      verb.should.equal('to walk');
-    });
-
-    it('should convert base regular verb to present form', () => {
-      let verb = grandiloquent
-        .verb('walk')
-        .toPresent()
-        .toString();
-      verb.should.be.a('string');
-      verb.should.equal('walk');
-    });
-
-    it('should convert base regular verb to future form', () => {
-      let verb = grandiloquent
-        .verb('walk')
-        .toFuture()
-        .toString();
-      verb.should.be.a('string');
-      verb.should.equal('will walk');
-    });
-
-    it('should convert base regular verb to past form', () => {
-      let verb = grandiloquent
-        .verb('walk')
-        .toPast()
-        .toString();
-      verb.should.be.a('string');
-      verb.should.equal('walked');
-    });
-
-    it('should convert base regular verb to future perfect progressive form', () => {
-      let verb = grandiloquent
-        .verb('walk')
-        .toFuturePerfectProgressive()
-        .toString();
-      verb.should.be.a('string');
-      verb.should.equal('will have been walking');
-    });
-  });
-});
-
 describe('Sentence', () => {
   describe('init', () => {
     it('should it a sentence without changing it', () => {
@@ -302,7 +153,7 @@ describe('Sentence', () => {
       sentence.should.equal('I walked slowly to the store');
     });
 
-    it('should insert text at a location relative to a named tag', () => {
+    it('should insert text at a location after a named tag', () => {
       let sentence = grandiloquent
         .sentence('I walked to the store')
         .insert('slowly', {after: '$mainVerb'})
@@ -311,13 +162,67 @@ describe('Sentence', () => {
       sentence.should.equal('I walked slowly to the store');
     });
 
-    it('should insert text at a location relative to a named tag', () => {
+    it('should insert text at a location before a named tag', () => {
       let sentence = grandiloquent
         .sentence('I walked to the store')
         .insert('slowly', {before: '$mainVerb'})
         .toString();
       sentence.should.be.a.string;
       sentence.should.equal('I slowly walked to the store');
+    });
+
+    it('should insert text at a location after a named tag', () => {
+      let sentence = grandiloquent
+        .sentence('After eating breakfast, Joe walked home.')
+        .insert('a happy', {before: '$subject'})
+        .toString();
+      sentence.should.be.a.string;
+      sentence.should.equal('After eating breakfast, a happy Joe walked home.');
+    });
+
+    it('should replace text of a named tag', () => {
+      let sentence = grandiloquent
+        .sentence('After eating breakfast, Joe walked home.')
+        .insert('Bill', {replace: '$subject'})
+        .toString();
+      sentence.should.be.a.string;
+      sentence.should.equal('After eating breakfast, Bill walked home.');
+    });
+
+    it('should replace text of a named tag (alias method)', () => {
+      let sentence = grandiloquent
+        .sentence('After eating breakfast, Joe walked home.')
+        .replace('$subject', 'Bill')
+        .toString();
+      sentence.should.be.a.string;
+      sentence.should.equal('After eating breakfast, Bill walked home.');
+    });
+
+    it('should transform a named tag (noun) to plural', () => {
+      let sentence = grandiloquent
+        .sentence('After eating breakfast, the student walked home.')
+        .transform('$subject', 'toPlural')
+        .toString();
+      sentence.should.be.a.string;
+      sentence.should.equal('After eating breakfast, the students walked home.');
+    });
+
+    it('should transform a named tag (verb) to plural', () => {
+      let sentence = grandiloquent
+        .sentence('The student walks home.')
+        .transform('$mainVerb', 'toPast')
+        .toString();
+      sentence.should.be.a.string;
+      sentence.should.equal('The student walked home.');
+    });
+
+    it('should transform the main verb from future to past', () => {
+      let sentence = grandiloquent
+        .sentence('After lunch the student will walk home.')
+        .transform('$mainVerbPhrase', 'toPast')
+        .toString();
+      sentence.should.be.a.string;
+      sentence.should.equal('After lunch the student walked home.');
     });
   });
 });

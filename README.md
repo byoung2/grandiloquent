@@ -2,7 +2,9 @@
 [![Node.js Version][node-version-image]][node-version-url]
 [![License](https://img.shields.io/github/license/byoung2/grandiloquent.svg?maxAge=2592000?style=plastic)](https://github.com/byoung2/grandiloquent/blob/master/LICENSE)
 
-A grammar parsing and manipulation library
+> gran·dil·o·quent
+> :  (adj.) Marked by fancy, extravagant, or pretentious speech, especially when trying to impress others.
+> :  (n.) A grammar parsing and manipulation library
 
 ## Install
 
@@ -72,7 +74,7 @@ let verb = grandiloquent
 console.log(verb.toString()); //he or she will have been circumnavigating
 ```
 
-### Part of Speech Tagging (experimental)
+### Part of Speech Tagging
 Grandiloquent includes an experimental pattern-based part of speech tagger. Using part of speech tokens described in the [Brown Corpus](https://en.wikipedia.org/wiki/Brown_Corpus) and a rules-based approach inspired by the [Brill Tagger](https://en.wikipedia.org/wiki/Brill_tagger), this tagger tests an approach that attempts to avoid a large lexicon file in favor of more pattern-based matching. Starting with a list of the top 2000 English words manually tagged, the tagger uses regular expressions to guess parts of speech for other words. Since some words can have more than one possible part of speech, patterns for groups of words are used to guess the most likely combination of tags.
 ```js
 var sentence = grandiloquent
@@ -168,7 +170,8 @@ Outputs
     }
 ]
 ```
-Get information about a sentence
+
+### Get information about a sentence
 ```js
 let sentence = grandiloquent
   .sentence('Are you the legal guardian of John Connor?');
@@ -200,7 +203,8 @@ let verb = grandiloquent
 
 console.log(verb.word); //I can not understand
 ```
-Transform a sentence
+
+### Transform a sentence
 ```js
 let sentence = grandiloquent
   .sentence('I walked.')
@@ -229,6 +233,48 @@ let sentence = grandiloquent
   .toString();
 
 console.log(sentence); //I walked slowly to the store.
+
+let sentence = grandiloquent
+  .sentence('I walked to the store.')
+  .prepend('Yesterday')
+  .toString();
+console.log(sentence); //Yesterday I walked to the store.
+
+let sentence = grandiloquent
+  .sentence('I walked to the store')
+  .insert('slowly', {after: '$mainVerb'})
+  .toString();
+console.log(sentence); //I walked slowly to the store
+
+let sentence = grandiloquent
+  .sentence('After eating breakfast, Joe walked home.')
+  .insert('Bill', {replace: '$subject'})
+  .toString();
+console.log(sentence); //After eating breakfast, Bill walked home.
+
+let sentence = grandiloquent
+  .sentence('After eating breakfast, Joe walked home.')
+  .replace('$subject', 'Bill')
+  .toString();
+console.log(sentence); //After eating breakfast, Bill walked home.
+
+let sentence = grandiloquent
+  .sentence('After eating breakfast, the student walked home.')
+  .transform('$subject', 'toPlural')
+  .toString();
+console.log(sentence); //After eating breakfast, the students walked home.
+
+let sentence = grandiloquent
+  .sentence('The student walks home.')
+  .transform('$mainVerb', 'toPast')
+  .toString();
+console.log(sentence); //The student walked home.
+
+let sentence = grandiloquent
+  .sentence('After lunch the student will walk home.')
+  .transform('$mainVerbPhrase', 'toPast')
+  .toString();
+console.log(sentence); //After lunch the student walked home.
 ```
 
 ## License
