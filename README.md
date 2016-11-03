@@ -64,6 +64,8 @@ console.log(verb.toString()); //walked
 verb.toFuture();
 console.log(verb.toString()); //will walk
 
+console.log(verb.getTense('had been going')); //past perfect progressive
+
 //Grandiloquent is fairly flexible with what you can pass in
 let verb = grandiloquent
   .verb('to boldly go')

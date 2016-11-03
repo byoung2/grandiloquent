@@ -58,4 +58,30 @@ describe('Verb', () => {
       verb.should.equal('will have been walking');
     });
   });
+
+  describe('get tense', () => {
+    it('should return present', () => {
+      let verb = grandiloquent
+        .verb('walk')
+        .getTense();
+      verb.should.be.a('string');
+      verb.should.equal('present');
+    });
+
+    it('should return past', () => {
+      let verb = grandiloquent
+        .verb('walked')
+        .getTense();
+      verb.should.be.a('string');
+      verb.should.equal('past');
+    });
+
+    it('should return future perfect', () => {
+      let verb = grandiloquent
+        .verb('will have walked')
+        .getTense();
+      verb.should.be.a('string');
+      verb.should.equal('future perfect');
+    });
+  });
 });
