@@ -73,6 +73,22 @@ let verb = grandiloquent
 
 console.log(verb.toString()); //had been going
 
+//As of 1.2.4, you can keep the adverb after transformation
+let verb = grandiloquent
+  .verb('to boldly go')
+  .keepAdverb()
+  .toPastPerfectProgressive();
+
+console.log(verb.toString()); //had been boldly going
+
+//If you hate split infinitives, don't worry, order is preserved
+let verb = grandiloquent
+  .verb('to go boldly')
+  .keepAdverb()
+  .toPastPerfectProgressive();
+
+console.log(verb.toString()); //had been going boldly
+
 //You can pass an instance of grandiloquent.pronoun.model to verb methods
 let pronoun = grandiloquent
   .pronoun('we')

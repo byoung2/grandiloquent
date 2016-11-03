@@ -57,6 +57,26 @@ describe('Verb', () => {
       verb.should.be.a('string');
       verb.should.equal('will have been walking');
     });
+
+    it('should convert base regular verb to past perfect progressive form keeping adverb', () => {
+      let verb = grandiloquent
+        .verb('to boldly go')
+        .toPastPerfectProgressive()
+        .keepAdverb()
+        .toString();
+      verb.should.be.a('string');
+      verb.should.equal('had been boldly going');
+    });
+
+    it('should convert base regular verb to future form keeping adverb', () => {
+      let verb = grandiloquent
+        .verb('to go quietly')
+        .toFuture()
+        .keepAdverb()
+        .toString();
+      verb.should.be.a('string');
+      verb.should.equal('will go quietly');
+    });
   });
 
   describe('get tense', () => {
