@@ -12,7 +12,7 @@
   } else if(typeof define === 'function' && define.amd) {
     define(factory);
   } else {
-    global.moment = factory()
+    global.grandiloquent = factory()
   }
 }(this, function () { 'use strict';
   return {
