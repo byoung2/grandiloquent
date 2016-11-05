@@ -204,7 +204,7 @@ const lexicon = {
   important: ['JJ'],
   family: ['NN'],
   those: ['PRP'],
-  example: ['NN','VB'],
+  example: ['NN'],
   while: ['CS','RB','IN','NN','VB'],
   he: ['PRP'],
   look: ['VB','NN','UH'],
@@ -2378,13 +2378,17 @@ const patterns = {
     [/^ABL/, /^AT/, /^JJ/],
     [/^ABL/, /^JJ/, /^NNS/],
     [/^CC/, /^PRP/, /^VB/],
-    [/^PP\$/, /^NN/, /^VBZ/]
+    [/^PP\$/, /^NN/, /^VBZ/],
+    [/^IN/, /^(JJ|NN)/, /^NN/]
   ],
   4: [
     [/^CC/, /^PRP/, /^VB/, /^IN/],
-    [/^CC/, /^PRP/, /^VB/, /^NN/]
+    [/^CC/, /^PRP/, /^VB/, /^NN/],
+    [/^VB/, /^AT/, /^JJ/, /^NN/]
   ],
-  5: []
+  5: [
+    [/^VB/, /^AT/, /^RB/, /^JJ/, /^NN/]
+  ]
 };
 
 module.exports = {
@@ -2418,7 +2422,6 @@ module.exports = {
       if(testVerb === irregularVerb.past.default) {
         pos.push('VBD');
       }
-
     }
     if(word.match(/([0-9]|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirt|fift|twenty|hundred|thousand|(mi|bi|tri)llion)/g)) {
       pos.push('CD');
@@ -2463,6 +2466,8 @@ module.exports = {
       pos.push('NNS');
     } else if(word.match(/(as)$/i)) {
       pos.push('NNS');
+    } else if(word.match(/(ous)$/i)) {
+      pos.push('JJ');
     } else if(word.match(/(s)$/i)) {
       pos.push('NNS', 'VBZ');
     }

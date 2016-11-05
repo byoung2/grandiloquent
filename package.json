@@ -1,6 +1,6 @@
 {
   "name": "grandiloquent",
-  "version": "1.2.4",
+  "version": "1.3.0",
   "description": "A grammar manupulation library",
   "author": "Bryan Young",
   "license": "MIT",
@@ -8,18 +8,27 @@
     "type": "git",
     "url": "git://github.com/byoung2/grandiloquent.git"
   },
-  "main": "grandiloquent.js",
+  "main": "./build/grandiloquent.js",
   "dependencies": {
-    "lodash": "^4.16.4"
+    "lodash": "^4.16.6"
   },
   "engines": {
     "node": ">=4.3.2"
   },
   "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-latest": "^6.16.0",
     "chai": "^3.5.0",
     "mocha": "^3.1.2"
   },
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha"
+    "test": "node ./node_modules/mocha/bin/mocha \"build/**/*.js\"",
+    "build": "./node_modules/.bin/babel src --out-dir build",
+    "prepublish": "./node_modules/.bin/babel src --out-dir build"
+  },
+  "babel": {
+    "presets": [
+      "latest"
+    ]
   }
 }
