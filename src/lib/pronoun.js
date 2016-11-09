@@ -27,6 +27,32 @@ class Pronoun extends Plugin {
     return this;
   }
 
+  getGender() {
+    let matchedPronoun = _.find(pronouns, item => {
+      let pronoun = this.clone().toBase().toString();
+      if(pronoun == item.pronoun) {
+        return true;
+      }
+    });
+    if(matchedPronoun) {
+      return matchedPronoun.gender;
+    }
+    return null;
+  }
+
+  getPerson() {
+    let matchedPronoun = _.find(pronouns, item => {
+      let pronoun = this.clone().toBase().toString();
+      if(pronoun == item.pronoun) {
+        return true;
+      }
+    });
+    if(matchedPronoun) {
+      return matchedPronoun.person;
+    }
+    return null;
+  }
+
   toBase() {
     this.current = this.input
       .toLowerCase()

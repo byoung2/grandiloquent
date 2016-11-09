@@ -91,4 +91,22 @@ describe('Pronoun', () => {
       pronoun.should.equal('he or she');
     });
   });
+
+  describe('meta', () => {
+    it('should get the gender', () => {
+      let pronoun = grandiloquent
+        .pronoun('he')
+        .getGender();
+      pronoun.should.be.a('string');
+      pronoun.should.equal('male');
+    });
+
+    it('should get the person', () => {
+      let pronoun = grandiloquent
+        .pronoun('he')
+        .getPerson();
+      pronoun.should.be.a('number');
+      pronoun.should.equal(3);
+    });
+  });
 });

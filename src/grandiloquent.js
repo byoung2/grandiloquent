@@ -19,6 +19,7 @@
     verb: require('./lib/verb.js').instance,
     pronoun: require('./lib/pronoun.js').instance,
     noun: require('./lib/noun.js').instance,
-    sentence: require('./lib/sentence.js').instance
+    sentence: require('./lib/sentence.js').instance,
+    paragraph: require('./lib/paragraph.js').instance
   };
 }));

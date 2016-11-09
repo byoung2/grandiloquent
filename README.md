@@ -14,7 +14,8 @@
 5. [Part of Speech Tagging](#part-of-speech-tagging)
 6. [Sentence Meta](#sentence-meta)
 7. [Transform Sentences](#transform-sentences)
-8. [License](#license)
+8. [Paragraphs](#paragraphs)
+9. [License](#license)
 
 ## Install
 
@@ -266,43 +267,69 @@ let sentence = grandiloquent
   .sentence('I walked to the store.')
   .prepend('Yesterday')
   .toString();
+
 console.log(sentence); //Yesterday I walked to the store.
 
 let sentence = grandiloquent
   .sentence('I walked to the store')
   .insert('slowly', {after: '$mainVerb'})
   .toString();
+
 console.log(sentence); //I walked slowly to the store
 
 let sentence = grandiloquent
   .sentence('After eating breakfast, Joe walked home.')
   .insert('Bill', {replace: '$subject'})
   .toString();
+
 console.log(sentence); //After eating breakfast, Bill walked home.
 
 let sentence = grandiloquent
   .sentence('After eating breakfast, Joe walked home.')
   .replace('$subject', 'Bill')
   .toString();
+
 console.log(sentence); //After eating breakfast, Bill walked home.
 
 let sentence = grandiloquent
   .sentence('After eating breakfast, the student walked home.')
   .transform('$subject', 'toPlural')
   .toString();
+
 console.log(sentence); //After eating breakfast, the students walked home.
 
 let sentence = grandiloquent
   .sentence('The student walks home.')
   .transform('$mainVerb', 'toPast')
   .toString();
+
 console.log(sentence); //The student walked home.
 
 let sentence = grandiloquent
   .sentence('After lunch the student will walk home.')
   .transform('$mainVerbPhrase', 'toPast')
   .toString();
+
 console.log(sentence); //After lunch the student walked home.
+```
+
+### Paragraphs
+Paragraph methods split strings into component sentences, with some methods to
+operate on those sentences in context. 
+```js
+let paragraph = grandiloquent
+  .paragraph('I came. I saw. I conquered.');
+
+console.log(paragraph.sentences[1].input); //I saw
+```
+
+A coreference is a link between a pronoun (e.g. she, he, her, him) and its noun.
+```js
+let paragraph = grandiloquent
+  .paragraph('Jane saw Bob play the guitar. She was very impressed.')
+  .resolveCoreferences();
+
+console.log(paragraph.sentences[1].tagged[0].coreference.word); //Jane
 ```
 
 ## License

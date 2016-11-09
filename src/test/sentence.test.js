@@ -4,7 +4,7 @@ chai.should();
 
 describe('Sentence', () => {
   describe('init', () => {
-    it('should it a sentence without changing it', () => {
+    it('should init a sentence without changing it', () => {
       let sentence = grandiloquent
         .sentence('If you wanna be my lover, you gotta get with my friends.')
         .toString();
