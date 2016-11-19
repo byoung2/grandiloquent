@@ -43,4 +43,14 @@ describe('Paragraph', () => {
       paragraph.sentences[1].tagged[0].coreference.word.should.equal('Jane');
     });
   });
+
+  describe('assertions', () => {
+    it('should extract basic assertions made in the paragraph', () => {
+      let assertions = grandiloquent
+        .paragraph('Joe walked to the store. Joe is a great teacher.')
+        .getAssertions();
+      assertions.should.be.an('array');
+
+    });
+  });
 });

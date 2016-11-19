@@ -1,5 +1,4 @@
 # grandiloquent
-[![Node.js Version][node-version-image]][node-version-url]
 [![License](https://img.shields.io/github/license/byoung2/grandiloquent.svg?maxAge=2592000?style=plastic)](https://github.com/byoung2/grandiloquent/blob/master/LICENSE)
 
 > gran·dil·o·quent
@@ -311,11 +310,18 @@ let sentence = grandiloquent
   .toString();
 
 console.log(sentence); //After lunch the student walked home.
+
+let sentence = grandiloquent
+  .sentence('After lunch the student will walk home while his teacher grades papers.')
+  .transform('$allVerbPhrases', 'toPast')
+  .toString();
+
+console.log(sentence); //After lunch the student walked home while his teacher graded papers.
 ```
 
 ### Paragraphs
 Paragraph methods split strings into component sentences, with some methods to
-operate on those sentences in context. 
+operate on those sentences in context.
 ```js
 let paragraph = grandiloquent
   .paragraph('I came. I saw. I conquered.');
@@ -338,5 +344,3 @@ Grandiloquent.js is freely distributable under the terms of the [MIT license](ht
 
 [license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
 [license-url]: LICENSE
-[node-version-image]: https://img.shields.io/badge/node-%3E%3D4.3.2-blue.svg
-[node-version-url]: https://nodejs.org/en/download/

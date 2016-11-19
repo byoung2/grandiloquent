@@ -60,6 +60,15 @@ class Paragraph extends Plugin {
     });
     return this;
   }
+
+  getAssertions() {
+    let assertions = [];
+    _.each(this.sentences, item => {
+      assertions.push([item.getSubject(), item.getMainVerb(), item.getPredicateTail()]);
+      //assertions.push([item.getSubjectPhrase(), item.getMainVerbPhrase()]);
+    });
+    return assertions;
+  }
 }
 
 module.exports.instance = (string) => {

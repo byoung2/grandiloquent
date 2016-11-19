@@ -206,6 +206,7 @@ class Verb extends Plugin {
       this.current = baseVerb
         .replace(/y$/, 'i')
         .replace(/([rlp])y$/, '$1i')
+        .replace(/e$/, '')
         .concat('ed');
     }
     let prepend = (pronoun ? pronoun + ' ' : '');

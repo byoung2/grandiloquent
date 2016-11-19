@@ -5,6 +5,7 @@ const partsOfSpeech = require('./../data/partsOfSpeech.js');
 const Verb = require('./verb.js');
 const Pronoun = require('./pronoun.js');
 const Noun = require('./noun.js');
+const Word = require('./word.js');
 
 class Sentence extends Plugin {
   constructor(string) {
@@ -134,7 +135,7 @@ class Sentence extends Plugin {
         item.meta.pos = partsOfSpeech.tags[item.tags.current];
         item.meta.reason = 'default';
       }
-      return item;
+      return Word.instance(item);
     });
     return this;
   }
@@ -258,6 +259,39 @@ class Sentence extends Plugin {
     return new Sentence(words);
   }
 
+  getAllVerbPhrases() {
+    let verbs = [];
+    let currentVerb = []
+    _.each(this.tagged, item => {
+      if(item.tags.current && item.tags.current.match(/^(RB|MD|VB)/g)) {
+        currentVerb.push(item);
+      } else {
+        if(currentVerb.length) {
+          verbs.push(new Sentence(currentVerb));
+        }
+        currentVerb = []
+      }
+    });
+    return verbs;
+  }
+
+  getPredicateTail() {
+    let verb = this.getMainVerb();
+    let subject = this.getSubjectPhrase();
+    if(!verb || !subject) {
+      return new Sentence('');
+    }
+    let words = _(this.tagged)
+      .dropWhile((item) => {
+        return item.index < verb.index;
+      })
+      .value();
+    if(!words.length) {
+      return new Sentence('');
+    }
+    return new Sentence(words);
+  }
+
   prepend(string) {
     let input = this.input;
     if(!_.first(this.tagged).tags.current.match(/^NNP/) && !input.match(/^i/i)) {
@@ -359,39 +393,49 @@ class Sentence extends Plugin {
     return this;
   }
 
-  replace(tag, string) {
-    this.insert(string, {replace: tag})
+  replace(tag, string, type) {
+    switch (type) {
+      case 'string':
+        this.reset(this.current.replace(tag, string));
+        break;
+      default:
+        this.insert(string, {replace: tag})
+    }
     return this;
   }
 
   transform(tag, transform, params) {
-    let string = null;
     if(tag.match(/^\$/)) {
       let method = 'get' + _.upperFirst(tag.replace(/^\$/, ''));
       if(typeof this[method] === "function") {
         let tag = this[method].apply(this, []);
-        if(tag instanceof Sentence) {
-          let verb = Verb.instance(tag.toString());
-          verb[transform].apply(verb, params);
-          string = verb.toString();
-        } else if(tag.tags.current && tag.tags.current.match(/^VB/)) {
-          let verb = Verb.instance(tag.word);
-          if(typeof verb[transform] === "function") {
+        if(!_.isArray(tag)) {
+          tag = [tag];
+        }
+        _.each(tag, tag => {
+          let string = null;
+          if(tag instanceof Sentence) {
+            let verb = Verb.instance(tag.toString());
             verb[transform].apply(verb, params);
             string = verb.toString();
+          } else if(tag.tags.current && tag.tags.current.match(/^VB/)) {
+            let verb = Verb.instance(tag.word);
+            if(typeof verb[transform] === "function") {
+              verb[transform].apply(verb, params);
+              string = verb.toString();
+            }
+          } else if(tag.tags.current && tag.tags.current.match(/^NN/)) {
+            let noun = Noun.instance(tag.word);
+            if(typeof noun[transform] === "function") {
+              noun[transform].apply(noun, params);
+              string = noun.toString();
+            }
           }
-        } else if(tag.tags.current && tag.tags.current.match(/^NN/)) {
-          let noun = Noun.instance(tag.word);
-          if(typeof noun[transform] === "function") {
-            noun[transform].apply(noun, params);
-            string = noun.toString();
+          if(string) {
+            this.replace(tag.toString(), new Sentence(string), 'string');
           }
-        }
+        });
       }
-    }
-
-    if(string) {
-      this.replace(tag, string);
     }
     return this;
   }

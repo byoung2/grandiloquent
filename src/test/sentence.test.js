@@ -224,5 +224,14 @@ describe('Sentence', () => {
       sentence.should.be.a.string;
       sentence.should.equal('After lunch the student walked home.');
     });
+
+    it('should transform all verbs from future to past', () => {
+      let sentence = grandiloquent
+        .sentence('After lunch the student will walk home while his teacher grades papers.')
+        .transform('$allVerbPhrases', 'toPast')
+        .toString();
+      sentence.should.be.a.string;
+      sentence.should.equal('After lunch the student walked home while his teacher graded papers.');
+    });
   });
 });
