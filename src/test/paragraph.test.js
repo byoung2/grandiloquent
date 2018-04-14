@@ -10,6 +10,13 @@ describe('Paragraph', () => {
       paragraph.sentences.should.be.an('array');
       paragraph.sentences[1].input.should.equal('I saw.');
     });
+
+    it('should not split on abbreviations', () => {
+      let paragraph = grandiloquent
+        .paragraph('Mr. Smith wanted to R.S.V.P. A.S.A.P. to avoid missing the party.');
+      paragraph.sentences.should.be.an('array');
+      paragraph.sentences.should.have.lengthOf(1)
+    });
   });
 
   describe('coreference', () => {

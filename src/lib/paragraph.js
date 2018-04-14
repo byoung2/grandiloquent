@@ -3,6 +3,7 @@ const Plugin = require('./plugin.js');
 const Sentence = require('./sentence.js');
 const Pronoun = require('./pronoun.js');
 const nameGenders = require('./../data/nameGenders.js');
+const abbreviations = require('./../data/abbreviations.js');
 
 class Paragraph extends Plugin {
   constructor(string) {
@@ -17,9 +18,24 @@ class Paragraph extends Plugin {
   }
 
   split() {
-    this.sentences = this.current
-      .match(/[^.!?]+[.!?]+/g)
-      .map(item => Sentence.instance(item.trim()));
+    let abbreviationList = [],
+    abbreviationIndex = 0,
+    abbreviationRegEx = new RegExp(`(${ abbreviations.join('|') })`, 'gi');
+    let current = this.current.replace(abbreviationRegEx, (match, param) => {
+      abbreviationList[abbreviationIndex] = match;
+      let replacement = `[token-${ abbreviationIndex }]`;
+      abbreviationIndex++;
+      return replacement;
+    });
+    this.sentences = current
+      .match(/[^.!?]+[.!?]+( |$)/g)
+      .map(item => {
+        item = item.trim()
+          .replace(/\[token-([0-9]+)\]/g, (match, param) => {
+            return abbreviationList[param];
+          });
+        return Sentence.instance(item);
+      });
   }
 
   resolveCoreferences() {
@@ -65,7 +81,6 @@ class Paragraph extends Plugin {
     let assertions = [];
     _.each(this.sentences, item => {
       assertions.push([item.getSubject(), item.getMainVerb(), item.getPredicateTail()]);
-      //assertions.push([item.getSubjectPhrase(), item.getMainVerbPhrase()]);
     });
     return assertions;
   }
