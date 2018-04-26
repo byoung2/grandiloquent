@@ -40,6 +40,16 @@ describe('Paragraph', () => {
       paragraph.sentences[1].tagged[2].coreference.word.should.equal('Bob');
     });
 
+    it('should replace pronoun object references', () => {
+      let paragraph = grandiloquent
+        .paragraph('I saw Bob play the guitar. I gave him a new Strat.')
+        .resolveCoreferences()
+        .replaceCoreferences();
+      paragraph.sentences.should.be.an('array');
+      paragraph.sentences[1].tagged.should.be.an('array');
+      paragraph.sentences[1].tagged[2].word.should.equal('Bob');
+    });
+
     it('should map pronoun references according to gender', () => {
       let paragraph = grandiloquent
         .paragraph('Jane saw Bob play the guitar. She was very impressed.')

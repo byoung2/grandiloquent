@@ -4,6 +4,7 @@ const Sentence = require('./sentence.js');
 const Pronoun = require('./pronoun.js');
 const nameGenders = require('./../data/nameGenders.js');
 const abbreviations = require('./../data/abbreviations.js');
+const Word = require('./word.js');
 
 class Paragraph extends Plugin {
   constructor(string) {
@@ -47,7 +48,7 @@ class Paragraph extends Plugin {
       plural: null
     };
     this.sentences = _.map(this.sentences, item => {
-      this.tagged = _.map(item.tagged, item => {
+      item.tagged = _.map(item.tagged, item => {
         if(item.tags.current && item.tags.current.match(/^P/g)) {
           let pronoun = Pronoun.instance(item.word);
           let currLastReference = null;
@@ -73,6 +74,24 @@ class Paragraph extends Plugin {
         return item
       });
       return item;
+    });
+    return this;
+  }
+
+  replaceCoreferences() {
+    this.sentences = _.map(this.sentences, item => {
+      item.tagged = _.map(item.tagged, item => {
+        if(item.coreference) {
+          return Word.instance(item.coreference);
+        }
+        return item
+      });
+      let sentence = _(item.tagged)
+        .map(item => item.word)
+        .value()
+        .join(' ')
+        .replace(/ ([,;:.!?]+)/g, '$1');
+      return Sentence.instance(sentence);
     });
     return this;
   }

@@ -336,6 +336,13 @@ let paragraph = grandiloquent
   .resolveCoreferences();
 
 console.log(paragraph.sentences[1].tagged[0].coreference.word); //Jane
+
+let paragraph = grandiloquent
+  .paragraph('Jane saw Bob play the guitar. She was very impressed.')
+  .resolveCoreferences()
+  .replaceCoreferences();
+
+console.log(paragraph.sentences[1].current); //Jane was very impressed
 ```
 
 ## License
