@@ -48,6 +48,17 @@ describe('Paragraph', () => {
       paragraph.sentences.should.be.an('array');
       paragraph.sentences[1].tagged.should.be.an('array');
       paragraph.sentences[1].tagged[2].word.should.equal('Bob');
+      paragraph.current.should.equal('I saw Bob play the guitar. I gave Bob a new Strat.');
+    });
+
+    it('should not replace references to the pronoun it', () => {
+      let paragraph = grandiloquent
+        .paragraph('I saw Bob play the guitar. He played it very well.')
+        .resolveCoreferences()
+        .replaceCoreferences();
+      paragraph.sentences.should.be.an('array');
+      paragraph.sentences[1].tagged.should.be.an('array');
+      paragraph.sentences[1].current.should.equal('Bob played the guitar very well.');
     });
 
     it('should map pronoun references according to gender', () => {

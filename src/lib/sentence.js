@@ -292,6 +292,21 @@ class Sentence extends Plugin {
     return new Sentence(words);
   }
 
+  getNounPhrase(noun) {
+    let words = _(this.tagged)
+      .dropRightWhile((item) => {
+        return item.current !== noun;
+      })
+      .dropWhile((item) => {
+        return item.tags.current && !item.tags.current.match(/^(A|J)/g);
+      })
+      .value();
+    if(!words.length) {
+      return new Sentence('');
+    }
+    return new Sentence(words);
+  }
+
   prepend(string) {
     let input = this.input;
     if(!_.first(this.tagged).tags.current.match(/^NNP/) && !input.match(/^i/i)) {

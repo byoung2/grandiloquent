@@ -47,8 +47,9 @@ class Paragraph extends Plugin {
       unknown: null,
       plural: null
     };
-    this.sentences = _.map(this.sentences, item => {
-      item.tagged = _.map(item.tagged, item => {
+    this.sentences = _.map(this.sentences, sentence => {
+      sentence.tagged = _.map(sentence.tagged, item => {
+        item.originalSentence = sentence;
         if(item.tags.current && item.tags.current.match(/^P/g)) {
           let pronoun = Pronoun.instance(item.word);
           let currLastReference = null;
@@ -70,21 +71,41 @@ class Paragraph extends Plugin {
           } else {
             lastReference.unknown = item;
           }
+        } else if(item.tags.current && item.tags.current.match(/^NN/g)) {
+          lastReference.unknown = item;
         }
         return item
       });
-      return item;
+      return sentence;
     });
     return this;
   }
 
   replaceCoreferences() {
+    this.sentences = _.map(this.sentences, sentence => {
+      _.map(sentence.tagged, (word, index) => {
+        if(word.coreference) {
+          let nounPhrase = word.coreference.toString();
+          if(!word.coreference.tags.current.match(/^NP/g)) {
+            nounPhrase = word.coreference.originalSentence.getNounPhrase(word.coreference.toString());
+          }
+          sentence.replace(word.current, nounPhrase, 'string');
+        }
+        return sentence;
+      });
+      return sentence;
+    });
+    this.reset(this.sentences.join(' '));
+    return this;
+
+
+
     this.sentences = _.map(this.sentences, item => {
       item.tagged = _.map(item.tagged, item => {
         if(item.coreference) {
           return Word.instance(item.coreference);
         }
-        return item
+        return item;
       });
       let sentence = _(item.tagged)
         .map(item => item.word)
@@ -93,6 +114,7 @@ class Paragraph extends Plugin {
         .replace(/ ([,;:.!?]+)/g, '$1');
       return Sentence.instance(sentence);
     });
+    this.reset(this.sentences.join(' '));
     return this;
   }
 
