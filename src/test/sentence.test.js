@@ -63,6 +63,20 @@ describe('Sentence', () => {
       sentence.hasSubordinateClause().should.be.true;
     });
 
+    it('should identify a nonobvious subordinate clause', () => {
+      let sentence = grandiloquent
+        .sentence('The dog was the biggest one I could find.');
+      sentence.hasSubordinateClause().should.be.true;
+      grandiloquent.sentence(sentence.getSubordinateClause()).toString().should.equal('I could find');
+    });
+
+    it('should identify a nonobvious subordinate clause with a complex subject', () => {
+      let sentence = grandiloquent
+        .sentence('Yesterday was the best concert the talented singer had ever performed.');
+      sentence.hasSubordinateClause().should.be.true;
+      grandiloquent.sentence(sentence.getSubordinateClause()).toString().should.equal('the talented singer had ever performed');
+    });
+
     it('should identify the main verb', () => {
       let verb = grandiloquent
         .sentence('While you walked to the car, I called Uber to pick me up.')

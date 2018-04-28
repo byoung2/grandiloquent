@@ -152,12 +152,45 @@ class Sentence extends Plugin {
   }
 
   getSubordinateClause() {
+    //The most obvious subordinate clauses start with a conjunction
     let conjunction = _.find(this.tagged, item => {
       return item.tags.current && item.tags.current.match(/^(C(S|C)|IN)/g);
     });
+
+    //If there is no conjunction, look for multiple subject/verb pairs
     if(!conjunction) {
+      let tagSignature = _(this.tagged)
+        .map(item => item.tags.current)
+        .value()
+        .join(' ');
+      //Sentence has more than one subject and verb
+      let matches = tagSignature.match(/\b[PN]\w+\b.*\bVB\w+\b(.*)\b([PN]\w+\b.*\bVB.*$)/);
+      if(matches) {
+        let combinedMatch = [matches[1].replace(/.*\b([PN]|VB)\w+/g, '').trim(), matches[2].trim()].join(' ').trim();
+        return _(this.tagged)
+          .takeRight(combinedMatch.split(' ').length)
+          .filter(item => {
+            return item.tags.current && item.tags.current !== '.';
+          })
+          .value();
+      }
       return null;
     }
+    let lastVerb = _.findLast(this.tagged, item => {
+      return item.tags.current && item.tags.current.match(/^(VB)/g) ;
+    });
+    //there should be a verb after the conjunction...
+    if(!lastVerb || lastVerb.index < conjunction.index) {
+      return null;
+    }
+    //...and a subject before that verb
+    let lastSubject = _.findLast(this.tagged, item => {
+      return item.tags.current && item.tags.current.match(/^(N|P)/g) && item.index < lastVerb.index;
+    });
+    if(!lastSubject) {
+      return null;
+    }
+
     let comma = _.find(this.tagged, item => {
       return item.word.match(/[,;]/g);
     });

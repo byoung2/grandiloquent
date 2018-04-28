@@ -2157,7 +2157,7 @@ const lexicon = {
   sudden: ['JJ'],
   supermarket: ['NN'],
   surround: ['VB','NN'],
-  switch: ['NN','VB'],
+  'switch': ['NN','VB'],
   terrible: ['JJ'],
   tired: ['VBN','VB'],
   tongue: ['NN'],
@@ -2339,6 +2339,7 @@ const lexicon = {
   suspicious: ['JJ'],
   sympathy: ['NN'],
   tale: ['NN'],
+  talented: ['JJ'],
   tall: ['JJ'],
   tear: ['VB','NN'],
   temporary: ['JJ','NN'],
@@ -2389,7 +2390,8 @@ const patterns = {
     [/^VB/, /^AT/, /^JJ/, /^NN/]
   ],
   5: [
-    [/^VB/, /^AT/, /^RB/, /^JJ/, /^NN/]
+    [/^VB/, /^AT/, /^RB/, /^JJ/, /^NN/],
+    [/^AT/, /^JJ/, /^CC/, /^JJ/, /^NN/],
   ]
 };
 
@@ -2472,6 +2474,14 @@ module.exports = {
       pos.push('JJ');
     } else if(word.match(/(s)$/i)) {
       pos.push('NNS', 'VBZ');
+    } else if(word.match(/(gest)$/i)) {
+      pos.push('JJT');
+    } else if(word.match(/[.;?]$/i)) {
+      pos.push('.');
+    } else if(word.match(/[,]$/i)) {
+      pos.push(',');
+    } else if(word.match(/[:]$/i)) {
+      pos.push(':');
     }
 
     return pos;
