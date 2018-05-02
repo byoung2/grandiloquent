@@ -151,6 +151,20 @@ class Sentence extends Plugin {
     return false;
   }
 
+  getMainClause() {
+    if(!this.hasSubordinateClause()) {
+      return this;
+    }
+    return new Sentence(_(this.tagged)
+      .differenceBy(this.getSubordinateClause(), 'index')
+      .filter(item => {
+        return item.tags.current && item.tags.current !== '.';
+      })
+      .map(item => item.word)
+      .value()
+      .join(' '));
+  }
+
   getSubordinateClause() {
     //The most obvious subordinate clauses start with a conjunction
     let conjunction = _.find(this.tagged, item => {

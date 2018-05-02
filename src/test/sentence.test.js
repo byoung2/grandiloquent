@@ -77,6 +77,13 @@ describe('Sentence', () => {
       grandiloquent.sentence(sentence.getSubordinateClause()).toString().should.equal('the talented singer had ever performed');
     });
 
+    it('should identify a main clause', () => {
+      let sentence = grandiloquent
+        .sentence('I was sleeping when you came home.');
+      sentence.hasSubordinateClause().should.be.true;
+      sentence.getMainClause().toString().should.equal('I was sleeping');
+    });
+
     it('should identify the main verb', () => {
       let verb = grandiloquent
         .sentence('While you walked to the car, I called Uber to pick me up.')
