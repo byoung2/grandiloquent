@@ -155,14 +155,18 @@ class Sentence extends Plugin {
     if(!this.hasSubordinateClause()) {
       return this;
     }
-    return new Sentence(_(this.tagged)
+    let temp = new Sentence(_(this.tagged)
       .differenceBy(this.getSubordinateClause(), 'index')
       .filter(item => {
-        return item.tags.current && item.tags.current !== '.';
+        return item.tags && item.tags.current !== '.';
       })
       .map(item => item.word)
       .value()
       .join(' '));
+    if(temp.hasSubordinateClause()) {
+      return temp.getMainClause();
+    }
+    return temp;
   }
 
   getSubordinateClause() {

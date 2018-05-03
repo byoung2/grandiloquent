@@ -79,9 +79,9 @@ describe('Sentence', () => {
 
     it('should identify a main clause', () => {
       let sentence = grandiloquent
-        .sentence('I was sleeping when you came home.');
+        .sentence(`Oh god this sushi was the worst quality fish I have ever tried in my life and I'm not kidding.`);
       sentence.hasSubordinateClause().should.be.true;
-      sentence.getMainClause().toString().should.equal('I was sleeping');
+      sentence.getMainClause().toString().should.equal('Oh god this sushi was the worst quality fish');
     });
 
     it('should identify the main verb', () => {
