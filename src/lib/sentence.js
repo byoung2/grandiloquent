@@ -2,6 +2,7 @@ const _ = require('lodash');
 const Plugin = require('./plugin.js');
 const contractions = require('./../data/contractions.js');
 const partsOfSpeech = require('./../data/partsOfSpeech.js');
+const nameGenders = require('./../data/nameGenders.js');
 const Verb = require('./verb.js');
 const Pronoun = require('./pronoun.js');
 const Noun = require('./noun.js');
@@ -44,9 +45,10 @@ class Sentence extends Plugin {
   }
 
   normalize() {
+    let nameRegExp = new RegExp(`((${ Object.keys(nameGenders).map(_.capitalize).join('|') })( |\b)([A-Z].+?( |\b))+)`, 'g');
     this.normalized = this.input
       .replace(/([,;:?.]+)( |$)/g, ' $1 ')
-      .replace(/((?!^)(\b[A-Z].+?( |\b))+)/g, '>$1>')
+      .replace(nameRegExp, '>$1>')
       .replace(/>(.*?) >/g, '>$1> ');
     _.each(contractions, v => {
       this.normalized = this.normalized.replace(v[0], v[1]);

@@ -36,6 +36,24 @@ describe('Sentence', () => {
       sentence.tagged[6].should.have.property('word', 'John Connor');
       sentence.tagged[6].should.have.deep.property('tags.current', 'NP');
     });
+
+    it('should recognize proper names at the start of the sentence', () => {
+      let sentence = grandiloquent
+        .sentence('John Connor is the leader of the resistance.');
+      sentence.tagged.should.be.an('array');
+      sentence.tagged.should.have.lengthOf(8);
+      sentence.tagged[0].should.have.property('word', 'John Connor');
+      sentence.tagged[0].should.have.deep.property('tags.current', 'NP');
+    });
+
+    it('should not recognize capital words start of the sentence as proper names', () => {
+      let sentence = grandiloquent
+        .sentence('Meet John Connor who is the leader of the resistance.');
+      sentence.tagged.should.be.an('array');
+      sentence.tagged.should.have.lengthOf(10);
+      sentence.tagged[1].should.have.property('word', 'John Connor');
+      sentence.tagged[1].should.have.deep.property('tags.current', 'NP');
+    });
   });
 
   describe('meta', () => {
