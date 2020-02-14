@@ -115,6 +115,52 @@ class Verb extends Plugin {
     return this;
   }
 
+  toPlural() {
+    let irregularVerb = _.find(irregular, item => {
+      let testVerb = _(this.tagged)
+        .filter(item => {
+          return item.tags.current && item.tags.current.match(/^(VB)/g);
+        })
+        .map(item => item.word)
+        .value();
+
+      return _.find(_.concat(
+        [item.present.default, item.past.default],
+        _.values(item.present.singular),
+        _.values(item.present.plural),
+        _.values(item.past.singular),
+        _.values(item.past.plural)
+      ), item => {
+        return testVerb[0] === item;
+      });
+    })
+    if(irregularVerb) {
+      //console.log('irregular verb', irregularVerb, this.getTense())
+      this.current = irregularVerb.present.default;
+    } else {
+      let testVerb = _(this.tagged)
+        .filter(item => {
+          return item.tags.current && item.tags.current.match(/^(VB)/g);
+        })
+        .map(item => item.word)
+        .value();
+      let input = null;
+      if(_.isArray(testVerb) && testVerb.length) {
+        input = _.last(testVerb);
+      } else {
+        input = this
+          .input
+          .trim()
+          .split(' ')
+          .pop();
+      }
+      this.current = input
+        .replace(/([rlp])ies$/, '$1ys')
+        .replace(/s$/, '');
+    }
+    return this;
+  }
+
   toInfinitive() {
     this.current = 'to ' + this.toBase();
     return this;

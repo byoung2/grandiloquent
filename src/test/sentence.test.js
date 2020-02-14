@@ -54,6 +54,16 @@ describe('Sentence', () => {
       sentence.tagged[1].should.have.property('word', 'John Connor');
       sentence.tagged[1].should.have.deep.property('tags.current', 'NP');
     });
+
+    it('should recognize uncommon names as proper names', () => {
+      let sentence = grandiloquent
+        .sentence('Meet your new president Abbcdefg Hijklmnop.');
+      console.log(sentence.normalized)
+      sentence.tagged.should.be.an('array');
+      sentence.tagged.should.have.lengthOf(6);
+      sentence.tagged[4].should.have.property('word', 'Abbcdefg Hijklmnop');
+      sentence.tagged[4].should.have.deep.property('tags.current', 'NP');
+    });
   });
 
   describe('meta', () => {

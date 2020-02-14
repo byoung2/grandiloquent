@@ -45,10 +45,12 @@ class Sentence extends Plugin {
   }
 
   normalize() {
-    let nameRegExp = new RegExp(`((${ Object.keys(nameGenders).map(_.capitalize).join('|') })( |\b)([A-Z].+?( |\b))+)`, 'g');
+    let nameRegExp = new RegExp(`((${ Object.keys(nameGenders).map(_.capitalize).join('|') })( |\b)([A-Z][a-zA-Z]+?( |\b))+)`, 'g');
+    let uncommonNameRegExp = new RegExp(` ([A-Z][a-zA-Z]+?( |\b)([A-Z][a-zA-Z]+?( |\b))+)`, 'g');
     this.normalized = this.input
       .replace(/([,;:?.]+)( |$)/g, ' $1 ')
       .replace(nameRegExp, '>$1>')
+      .replace(uncommonNameRegExp, ' >$1>')
       .replace(/>(.*?) >/g, '>$1> ');
     _.each(contractions, v => {
       this.normalized = this.normalized.replace(v[0], v[1]);
@@ -247,7 +249,15 @@ class Sentence extends Plugin {
       })
       .value();
     if(!subjects.length) {
-      return null;
+      subjects = _(this.tagged)
+        .differenceBy(this.getSubordinateClause(), 'index')
+        .filter(item => {
+          return item.tags.current && item.tags.current.match(/^(P|N)/g);
+        })
+        .value();
+        if(!subjects.length) {
+          return null;
+        }
     }
     return subjects.shift();
   }
@@ -486,13 +496,13 @@ class Sentence extends Plugin {
             let verb = Verb.instance(tag.toString());
             verb[transform].apply(verb, params);
             string = verb.toString();
-          } else if(tag.tags.current && tag.tags.current.match(/^VB/)) {
+          } else if(tag && tag.tags.current && tag.tags.current.match(/^VB/)) {
             let verb = Verb.instance(tag.word);
             if(typeof verb[transform] === "function") {
               verb[transform].apply(verb, params);
               string = verb.toString();
             }
-          } else if(tag.tags.current && tag.tags.current.match(/^NN/)) {
+          } else if(tag && tag.tags.current && tag.tags.current.match(/^NN/)) {
             let noun = Noun.instance(tag.word);
             if(typeof noun[transform] === "function") {
               noun[transform].apply(noun, params);
