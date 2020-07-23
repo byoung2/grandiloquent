@@ -29,7 +29,7 @@ class Paragraph extends Plugin {
       return replacement;
     });
     this.sentences = current
-      .match(/[^.!?]+[.!?]+( |$)/g)
+      .match(/[^.!?]+[.!?]+( |$|\n)/g)
       .map(item => {
         item = item.trim()
           .replace(/\[token-([0-9]+)\]/g, (match, param) => {

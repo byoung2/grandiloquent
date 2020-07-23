@@ -79,6 +79,24 @@ describe('Sentence', () => {
       sentence.isQuestion().should.be.false;
     });
 
+    it('should identify a yes/no question', () => {
+      let sentence = grandiloquent
+        .sentence('Are you the legal guardian of John Connor?');
+      sentence.isYesNoQuestion().should.be.true;
+    });
+
+    it('should identify a yes/no question with subordinate clause', () => {
+      let sentence = grandiloquent
+        .sentence('Before you came to America, were you the legal guardian of John Connor?');
+      sentence.isYesNoQuestion().should.be.true;
+    });
+
+    it('should identify a non yes/no question', () => {
+      let sentence = grandiloquent
+        .sentence('Where is John Connor?');
+      sentence.isYesNoQuestion().should.be.false;
+    });
+
     it('should identify a subordinate clause', () => {
       let sentence = grandiloquent
         .sentence('I was sleeping when you came home.');

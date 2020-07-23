@@ -148,6 +148,10 @@ class Sentence extends Plugin {
     return _.last(this.tokenized) === '?';
   }
 
+  isYesNoQuestion() {
+    return this.isQuestion() && !!this.getMainClause().tagged[0].tags.current.match(/(MD|VB)/gi);
+  }
+
   hasSubordinateClause() {
     if(this.getSubordinateClause()) {
       return true;
@@ -163,6 +167,9 @@ class Sentence extends Plugin {
       .differenceBy(this.getSubordinateClause(), 'index')
       .filter(item => {
         return item.tags && item.tags.current !== '.';
+      })
+      .dropWhile((item) => {
+        return item.tags && item.tags.current == ',';
       })
       .map(item => item.word)
       .value()

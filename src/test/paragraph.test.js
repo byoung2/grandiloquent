@@ -17,6 +17,22 @@ describe('Paragraph', () => {
       paragraph.sentences.should.be.an('array');
       paragraph.sentences.should.have.lengthOf(1)
     });
+
+    it('should not split on decimals', () => {
+      let paragraph = grandiloquent
+        .paragraph('Parking is $10.00 per night.');
+      paragraph.sentences.should.be.an('array');
+      paragraph.sentences.should.have.lengthOf(1)
+    });
+
+    it('should split on newlines', () => {
+      let paragraph = grandiloquent
+        .paragraph(`I came.
+        I saw.
+        I conquered.`);
+      paragraph.sentences.should.be.an('array');
+      paragraph.sentences.should.have.lengthOf(3)
+    });
   });
 
   describe('coreference', () => {
