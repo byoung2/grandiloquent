@@ -152,6 +152,10 @@ class Sentence extends Plugin {
     return this.isQuestion() && !!this.getMainClause().tagged[0].tags.current.match(/(MD|VB)/gi);
   }
 
+  isImperativeMood() {
+    return !this.isQuestion() && this.getMainClause().tagged[0].tags.current === 'VB';
+  }
+
   hasSubordinateClause() {
     if(this.getSubordinateClause()) {
       return true;

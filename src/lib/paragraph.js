@@ -28,6 +28,10 @@ class Paragraph extends Plugin {
       abbreviationIndex++;
       return replacement;
     });
+    if(!current.match(/[^.!?]+[.!?]+( |$|\n)/g)) {
+      this.sentences = [Sentence.instance(this.input)];
+      return;
+    }
     this.sentences = current
       .match(/[^.!?]+[.!?]+( |$|\n)/g)
       .map(item => {

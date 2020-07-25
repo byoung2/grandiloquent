@@ -58,11 +58,17 @@ describe('Sentence', () => {
     it('should recognize uncommon names as proper names', () => {
       let sentence = grandiloquent
         .sentence('Meet your new president Abbcdefg Hijklmnop.');
-      console.log(sentence.normalized)
       sentence.tagged.should.be.an('array');
       sentence.tagged.should.have.lengthOf(6);
       sentence.tagged[4].should.have.property('word', 'Abbcdefg Hijklmnop');
       sentence.tagged[4].should.have.deep.property('tags.current', 'NP');
+    });
+
+    it('should recognize wh- words as special adverbs', () => {
+      let sentence = grandiloquent
+        .sentence('Where is the bathroom?');
+      sentence.tagged.should.be.an('array');
+      sentence.tagged[0].should.have.deep.property('tags.current', 'WRB');
     });
   });
 
@@ -95,6 +101,20 @@ describe('Sentence', () => {
       let sentence = grandiloquent
         .sentence('Where is John Connor?');
       sentence.isYesNoQuestion().should.be.false;
+    });
+
+    it('should recognize imperative mood', () => {
+      let sentence = grandiloquent
+        .sentence('Call now!');
+      sentence.tagged.should.be.an('array');
+      sentence.isImperativeMood().should.be.true;
+    });
+
+    it('should recognize imperative mood with subordinate clause first', () => {
+      let sentence = grandiloquent
+        .sentence('When you get home, call me!');
+      sentence.tagged.should.be.an('array');
+      sentence.isImperativeMood().should.be.true;
     });
 
     it('should identify a subordinate clause', () => {
