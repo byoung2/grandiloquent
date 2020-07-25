@@ -153,7 +153,10 @@ class Sentence extends Plugin {
   }
 
   isImperativeMood() {
-    return !this.isQuestion() && this.getMainClause().tagged[0].tags.current === 'VB';
+    return !this.isQuestion() && (
+      this.getMainClause().tagged[0].tags.current === 'VB' ||
+      (this.getMainClause().tagged[0].tags.current === 'RB' && this.getMainClause().tagged[1].tags.current === 'VB')
+    );
   }
 
   hasSubordinateClause() {

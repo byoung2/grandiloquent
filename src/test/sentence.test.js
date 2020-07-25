@@ -110,6 +110,13 @@ describe('Sentence', () => {
       sentence.isImperativeMood().should.be.true;
     });
 
+    it('should recognize imperative mood with adverb first', () => {
+      let sentence = grandiloquent
+        .sentence('Quickly walk away!');
+      sentence.tagged.should.be.an('array');
+      sentence.isImperativeMood().should.be.true;
+    });
+
     it('should recognize imperative mood with subordinate clause first', () => {
       let sentence = grandiloquent
         .sentence('When you get home, call me!');
