@@ -1,6 +1,6 @@
 {
   "name": "grandiloquent",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "A grammar manupulation library",
   "author": "Bryan Young",
   "license": "MIT",
@@ -10,7 +10,8 @@
   },
   "main": "./build/grandiloquent.js",
   "dependencies": {
-    "lodash": "^4.16.6"
+    "lodash": "^4.17.19",
+    "sbd": "^1.0.18"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

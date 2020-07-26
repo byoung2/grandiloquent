@@ -4,7 +4,7 @@ const Sentence = require('./sentence.js');
 const Pronoun = require('./pronoun.js');
 const nameGenders = require('./../data/nameGenders.js');
 const abbreviations = require('./../data/abbreviations.js');
-const Word = require('./word.js');
+const sentenceBoundaryDetector = require('sbd');
 
 class Paragraph extends Plugin {
   constructor(string) {
@@ -19,7 +19,7 @@ class Paragraph extends Plugin {
   }
 
   split() {
-    let abbreviationList = [],
+    /*let abbreviationList = [],
     abbreviationIndex = 0,
     abbreviationRegEx = new RegExp(`(${ abbreviations.join('|') })`, 'gi');
     let current = this.current.replace(abbreviationRegEx, (match, param) => {
@@ -27,18 +27,11 @@ class Paragraph extends Plugin {
       let replacement = `[token-${ abbreviationIndex }]`;
       abbreviationIndex++;
       return replacement;
-    });
-    if(!current.match(/[^.!?]+[.!?]+( |$|\n)/g)) {
-      this.sentences = [Sentence.instance(this.input)];
-      return;
-    }
-    this.sentences = current
-      .match(/[^.!?]+[.!?]+( |$|\n)/g)
+    });*/
+    const sentences = sentenceBoundaryDetector.sentences(this.current, {});
+    this.sentences = sentences
       .map(item => {
         item = item.trim()
-          .replace(/\[token-([0-9]+)\]/g, (match, param) => {
-            return abbreviationList[param];
-          });
         return Sentence.instance(item);
       });
   }
@@ -98,25 +91,6 @@ class Paragraph extends Plugin {
         return sentence;
       });
       return sentence;
-    });
-    this.reset(this.sentences.join(' '));
-    return this;
-
-
-
-    this.sentences = _.map(this.sentences, item => {
-      item.tagged = _.map(item.tagged, item => {
-        if(item.coreference) {
-          return Word.instance(item.coreference);
-        }
-        return item;
-      });
-      let sentence = _(item.tagged)
-        .map(item => item.word)
-        .value()
-        .join(' ')
-        .replace(/ ([,;:.!?]+)/g, '$1');
-      return Sentence.instance(sentence);
     });
     this.reset(this.sentences.join(' '));
     return this;
