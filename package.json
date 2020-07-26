@@ -1,6 +1,6 @@
 {
   "name": "grandiloquent",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "A grammar manupulation library",
   "author": "Bryan Young",
   "license": "MIT",
@@ -28,5 +28,9 @@
     "presets": [
       "latest"
     ]
+  },
+  "funding": {
+    "type": "individual",
+    "url": "https://www.npmjs.com/package/grandiloquent#donate"
   }
 }

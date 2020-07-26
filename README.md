@@ -26,6 +26,16 @@ $ npm install --save grandiloquent
 
 Grandiloquent is a grammar manipulation library. You can use it to change the person or number of pronouns, and to transform verbs between tenses. This is particularly useful for creating grammar correction applications, preprocessing text for NLP or sentiment analysis applications, creating chatbots, etc.
 
+
+## Donate
+
+Grandiloquent is a labor of love, and if you find it useful, please consider making a small donation. A cup of coffee or a beer is all it takes!
+
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2Q4J6UC8RM6LA&source=url)
+
+
+## Examples
+
 Here are a few examples:
 
 ```js
