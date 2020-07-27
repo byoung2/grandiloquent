@@ -400,7 +400,14 @@ const irregularVerbs = {
       default: 'chose'
     },
     pastParticiples: [ 'chosen' ]
-  }
+  },
+  'eat': {
+    base: 'eat',
+    past: {
+      default: 'ate'
+    },
+    pastParticiples: [ 'eaten' ]
+  },
 };
 module.exports = _.mapValues(irregularVerbs, item => {
   return _.defaultsDeep(item, {

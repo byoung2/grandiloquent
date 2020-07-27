@@ -68,14 +68,29 @@ class Verb extends Plugin {
   }
 
   toBase() {
+    let testVerb = _(this.tagged)
+      .filter(item => {
+        return item.tags.current && item.tags.current.match(/^(VB)/g);
+      })
+      .map(item => item.word)
+      .value();
+    let input = null;
+    if(_.isArray(testVerb) && testVerb.length) {
+      input = _.last(testVerb);
+    } else {
+      input = this
+        .input
+        .trim()
+        .split(' ')
+        .pop();
+    }
     let irregularVerb = _.find(irregular, item => {
-      let testVerb = _(this.tagged)
+      let testVerb = _(new Verb(input).tagged)
         .filter(item => {
           return item.tags.current && item.tags.current.match(/^(VB)/g);
         })
         .map(item => item.word)
         .value();
-
       return _.find(_.concat(
         [item.present.default, item.past.default],
         _.values(item.present.singular),
@@ -83,28 +98,12 @@ class Verb extends Plugin {
         _.values(item.past.singular),
         _.values(item.past.plural)
       ), item => {
-        return testVerb === item;
+        return testVerb.indexOf(item) !== -1;
       });
-    })
+    });
     if(irregularVerb) {
       this.current = irregularVerb.base;
     } else {
-      let testVerb = _(this.tagged)
-        .filter(item => {
-          return item.tags.current && item.tags.current.match(/^(VB)/g);
-        })
-        .map(item => item.word)
-        .value();
-      let input = null;
-      if(_.isArray(testVerb) && testVerb.length) {
-        input = _.last(testVerb);
-      } else {
-        input = this
-          .input
-          .trim()
-          .split(' ')
-          .pop();
-      }
       this.current = input
         .replace(/ied$/, 'yed')
         .replace(/([rlp])ies$/, '$1ys')
@@ -112,6 +111,7 @@ class Verb extends Plugin {
         .replace(/tt(ed|ing)$/, 't$1')
         .replace(/(ed|ing|s)$/, '');
     }
+  
     return this;
   }
 
@@ -135,7 +135,6 @@ class Verb extends Plugin {
       });
     })
     if(irregularVerb) {
-      //console.log('irregular verb', irregularVerb, this.getTense())
       this.current = irregularVerb.present.default;
     } else {
       let testVerb = _(this.tagged)
@@ -400,30 +399,29 @@ class Verb extends Plugin {
   }
 
   getTense() {
-    let verb = this.clone();
-    if(verb.toPresent().toString() == this.current) {
+    if(this.clone().toPresent().toString() == this.current) {
       return 'present';
-    } else if(verb.toFuture().toString() == this.current) {
+    } else if(this.clone().toFuture().toString() == this.current) {
       return 'future';
-    } else if(verb.toPast().toString() == this.current) {
+    } else if(this.clone().toPast().toString() == this.current) {
       return 'past';
-    } else if(verb.toPresentProgressive().toString() == this.current) {
+    } else if(this.clone().toPresentProgressive().toString() == this.current) {
       return 'present progressive';
-    } else if(verb.toFutureProgressive().toString() == this.current) {
+    } else if(this.clone().toFutureProgressive().toString() == this.current) {
       return 'future progressive';
-    } else if(verb.toPastProgressive().toString() == this.current) {
+    } else if(this.clone().toPastProgressive().toString() == this.current) {
       return 'past progressive';
-    } else if(verb.toPresentPerfect().toString() == this.current) {
+    } else if(this.clone().toPresentPerfect().toString() == this.current) {
       return 'present perfect';
-    } else if(verb.toFuturePerfect().toString() == this.current) {
+    } else if(this.clone().toFuturePerfect().toString() == this.current) {
       return 'future perfect';
-    } else if(verb.toPastPerfect().toString() == this.current) {
+    } else if(this.clone().toPastPerfect().toString() == this.current) {
       return 'past perfect';
-    } else if(verb.toPresentPerfectProgressive().toString() == this.current) {
+    } else if(this.clone().toPresentPerfectProgressive().toString() == this.current) {
       return 'present perfect progressive';
-    } else if(verb.toFuturePerfectProgressive().toString() == this.current) {
+    } else if(this.clone().toFuturePerfectProgressive().toString() == this.current) {
       return 'future perfect progressive';
-    } else if(verb.toPastPerfectProgressive().toString() == this.current) {
+    } else if(this.clone().toPastPerfectProgressive().toString() == this.current) {
       return 'past perfect progressive';
     }
     return null;

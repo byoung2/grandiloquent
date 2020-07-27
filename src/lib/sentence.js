@@ -256,7 +256,7 @@ class Sentence extends Plugin {
     let subjects = _(this.tagged)
       .differenceBy(this.getSubordinateClause(), 'index')
       .dropRightWhile((item) => {
-        return item.index > verb.index;
+        return item && verb && item.index > verb.index;
       })
       .filter(item => {
         return item.tags.current && item.tags.current.match(/^(P|N)/g);
@@ -308,7 +308,7 @@ class Sentence extends Plugin {
     }
     let words = _(this.tagged)
       .dropRightWhile((item) => {
-        return item.index > verb.index;
+        return item && verb && item.index > verb.index;
       })
       .dropWhile((item) => {
         return item.index < subject.index;

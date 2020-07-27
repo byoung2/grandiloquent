@@ -8,13 +8,14 @@
 # Table of Contents
 1. [Install](#install)
 2. [Introduction](#introduction)
-3. [Pronouns](#pronouns)
-4. [Verbs](#verbs)
-5. [Part of Speech Tagging](#part-of-speech-tagging)
-6. [Sentence Meta](#sentence-meta)
-7. [Transform Sentences](#transform-sentences)
-8. [Paragraphs](#paragraphs)
-9. [License](#license)
+3. [Donate](#donate)
+4. [Pronouns](#pronouns)
+5. [Verbs](#verbs)
+6. [Part of Speech Tagging](#part-of-speech-tagging)
+7. [Sentence Meta](#sentence-meta)
+8. [Transform Sentences](#transform-sentences)
+9. [Paragraphs](#paragraphs)
+10. [License](#license)
 
 ## Install
 

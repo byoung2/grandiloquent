@@ -4,6 +4,24 @@ chai.should();
 
 describe('Verb', () => {
   describe('base', () => {
+    it('should convert irregular verb be to base form', () => {
+      let verb = grandiloquent
+        .verb('am')
+        .toBase()
+        .toString();
+      verb.should.be.a('string');
+      verb.should.equal('be');
+    });
+
+    it('should convert irregular verb eat to base form', () => {
+      let verb = grandiloquent
+        .verb('ate')
+        .toBase()
+        .toString();
+      verb.should.be.a('string');
+      verb.should.equal('eat');
+    });
+
     it('should convert singular 3rd person present tense regular verb to base form', () => {
       let verb = grandiloquent
         .verb('walks')

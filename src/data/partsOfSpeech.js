@@ -2427,6 +2427,12 @@ module.exports = {
       if(testVerb === irregularVerb.past.default) {
         pos.push('VBD');
       }
+      if (irregularVerb.present.singular && _.values(irregularVerb.present.singular).indexOf(testVerb) !== -1) {
+        pos.push('VBP');
+      }
+      if (irregularVerb.past.singular && _.values(irregularVerb.past.singular).indexOf(testVerb) !== -1) {
+        pos.push('VBD');
+      }
     }
     if(word.match(/([0-9]|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirt|fift|twenty|hundred|thousand|(mi|bi|tri)llion)/g)) {
       pos.push('CD');
