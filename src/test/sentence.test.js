@@ -174,11 +174,19 @@ describe('Sentence', () => {
     });
 
     it('should identify the subject', () => {
-      let verb = grandiloquent
+      let subject = grandiloquent
         .sentence('I cannot understand why you called Uber to pick me up.')
         .getSubject();
-      verb.should.be.an.object;
-      verb.should.have.property('word', 'I');
+      subject.should.be.an.object;
+      subject.should.have.property('word', 'I');
+    });
+
+    it('should identify the subject when ambiguous nouns are present', () => {
+      let subject = grandiloquent
+        .sentence('Yesterday I ate cake.')
+        .getSubject();
+      subject.should.be.an.object;
+      subject.should.have.property('word', 'I');
     });
 
     it('should identify the subject phrase', () => {

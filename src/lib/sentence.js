@@ -259,14 +259,14 @@ class Sentence extends Plugin {
         return item && verb && item.index > verb.index;
       })
       .filter(item => {
-        return item.tags.current && item.tags.current.match(/^(P|N)/g);
+        return item.tags.current && item.tags.current.match(/^(P|N)/g) && !item.tags.current.match(/^(NR)/g);
       })
       .value();
     if(!subjects.length) {
       subjects = _(this.tagged)
         .differenceBy(this.getSubordinateClause(), 'index')
         .filter(item => {
-          return item.tags.current && item.tags.current.match(/^(P|N)/g);
+          return item.tags.current && item.tags.current.match(/^(P|N)/g && !item.tags.current.match(/^(NR)/g));
         })
         .value();
         if(!subjects.length) {
