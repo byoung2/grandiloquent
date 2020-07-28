@@ -216,6 +216,24 @@ describe('Sentence', () => {
       verb.should.be.a.string;
       verb.should.equal('Most doctors reluctantly agree');
     });
+
+    it('should identify the predicate adjective phrase', () => {
+      let verb = grandiloquent
+        .sentence('I am extremely angry at you.')
+        .getPredicateAdjective()
+        .toString();
+      verb.should.be.a.string;
+      verb.should.equal('extremely angry');
+    });
+
+    it('should identify the predicate noun phrase', () => {
+      let verb = grandiloquent
+        .sentence('I am just a simple farmer.')
+        .getPredicateNoun()
+        .toString();
+      verb.should.be.a.string;
+      verb.should.equal('just a simple farmer');
+    });
   });
 
   describe('transform', () => {

@@ -19,15 +19,6 @@ class Paragraph extends Plugin {
   }
 
   split() {
-    /*let abbreviationList = [],
-    abbreviationIndex = 0,
-    abbreviationRegEx = new RegExp(`(${ abbreviations.join('|') })`, 'gi');
-    let current = this.current.replace(abbreviationRegEx, (match, param) => {
-      abbreviationList[abbreviationIndex] = match;
-      let replacement = `[token-${ abbreviationIndex }]`;
-      abbreviationIndex++;
-      return replacement;
-    });*/
     const sentences = sentenceBoundaryDetector.sentences(this.current, {});
     this.sentences = sentences
       .map(item => {

@@ -369,6 +369,46 @@ class Sentence extends Plugin {
     return new Sentence(words);
   }
 
+  getPredicateAdjective() {
+    let verb = this.getMainVerb();
+    let subject = this.getSubjectPhrase();
+    if(!verb || !subject) {
+      return new Sentence('');
+    }
+    let words = _(this.tagged)
+      .dropWhile((item) => {
+        return item.index <= verb.index || item.index <= subject.index;
+      })
+      .takeWhile((item) => {
+        return item.tags.current && item.tags.current.match(/^(R|J)/g);
+      })
+      .value();
+    if(!words.length) {
+      return new Sentence('');
+    }
+    return new Sentence(words);
+  }
+
+  getPredicateNoun() {
+    let verb = this.getMainVerb();
+    let subject = this.getSubjectPhrase();
+    if(!verb || !subject) {
+      return new Sentence('');
+    }
+    let words = _(this.tagged)
+      .dropWhile((item) => {
+        return item.index <= verb.index || item.index <= subject.index;
+      })
+      .takeWhile((item) => {
+        return item.tags.current && item.tags.current.match(/^(R|J|P|N|D|Q|O|I)/g);
+      })
+      .value();
+    if(!words.length) {
+      return new Sentence('');
+    }
+    return new Sentence(words);
+  }
+
   getNounPhrase(noun) {
     let words = _(this.tagged)
       .dropRightWhile((item) => {
