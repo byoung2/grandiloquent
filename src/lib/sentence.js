@@ -393,7 +393,12 @@ class Sentence extends Plugin {
     let verb = this.getMainVerb();
     let subject = this.getSubjectPhrase();
     if(!verb || !subject) {
-      return new Sentence('');
+      if(!this.isImperativeMood()) {
+        return new Sentence('');
+      }
+      if(!subject) {
+        subject = {index: 0};
+      }
     }
     let words = _(this.tagged)
       .dropWhile((item) => {

@@ -234,6 +234,15 @@ describe('Sentence', () => {
       verb.should.be.a.string;
       verb.should.equal('just a simple farmer');
     });
+
+    it('should identify the predicate noun phrase', () => {
+      let verb = grandiloquent
+        .sentence('Give me a break.')
+        .getPredicateNoun()
+        .toString();
+      verb.should.be.a.string;
+      verb.should.equal('me');
+    });
   });
 
   describe('transform', () => {
