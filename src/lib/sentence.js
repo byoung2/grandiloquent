@@ -181,7 +181,7 @@ class Sentence extends Plugin {
       .map(item => item.word)
       .value()
       .join(' '));
-    if(temp.hasSubordinateClause()) {
+    if(this.input !== temp.input && temp.hasSubordinateClause()) {
       return temp.getMainClause();
     }
     return temp;
@@ -281,7 +281,7 @@ class Sentence extends Plugin {
     let words = _(this.tagged)
       .differenceBy(this.getSubordinateClause(), 'index')
       .dropRightWhile((item) => {
-        return item.index >= verb.index;
+        return item && verb && item.index >= verb.index;
       })
       .dropRightWhile((item) => {
         return item.tags.current && item.tags.current.match(/^(RB|MD|VB)/g);
@@ -360,7 +360,7 @@ class Sentence extends Plugin {
     }
     let words = _(this.tagged)
       .dropWhile((item) => {
-        return item.index < verb.index;
+        return item && verb && item.index < verb.index;
       })
       .value();
     if(!words.length) {
@@ -405,7 +405,7 @@ class Sentence extends Plugin {
         return item.index <= verb.index || item.index <= subject.index;
       })
       .takeWhile((item) => {
-        return item.tags.current && item.tags.current.match(/^(R|J|P|N|D|Q|O|I)/g);
+        return item.tags.current && item.tags.current.match(/^(R|J|P|N|D|Q|O|I|V)/g);
       })
       .value();
     if(!words.length) {
