@@ -70,6 +70,23 @@ describe('Sentence', () => {
       sentence.tagged.should.be.an('array');
       sentence.tagged[0].should.have.deep.property('tags.current', 'WRB');
     });
+
+    
+    it('should recognize phone number as a single token', function () {
+      var sentence = grandiloquent.sentence('My phone number is (310) 123-4567');
+      sentence.tagged.should.be.an('array');
+      console.log(' normalized', sentence.tagged[4])
+      sentence.tagged.should.have.lengthOf(5);
+      sentence.tagged[4].should.have.property('word', '(310) 123-4567');
+    });
+
+    it('should recognize email as a single token', function () {
+      var sentence = grandiloquent.sentence('My email address is user@host.com');
+      sentence.tagged.should.be.an('array');
+      console.log(' normalized', sentence.tagged[4])
+      sentence.tagged.should.have.lengthOf(5);
+      sentence.tagged[4].should.have.property('word', 'user@host.com');
+    });
   });
 
   describe('meta', () => {

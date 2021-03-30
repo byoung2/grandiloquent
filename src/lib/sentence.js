@@ -47,10 +47,12 @@ class Sentence extends Plugin {
   normalize() {
     let nameRegExp = new RegExp(`((${ Object.keys(nameGenders).map(_.capitalize).join('|') })( |\b)([A-Z][a-zA-Z]+?( |\b))+)`, 'g');
     let uncommonNameRegExp = new RegExp(` ([A-Z][a-zA-Z]+?( |\b)([A-Z][a-zA-Z]+?( |\b))+)`, 'g');
+    let phoneRegExp = new RegExp(`([+]?1? ?[(]?[0-9]{3}[)-. ]? ?[0-9]{3}[. -]?[0-9]{4})`, 'g');
     this.normalized = this.input
       .replace(/([,;:?.]+)( |$)/g, ' $1 ')
       .replace(nameRegExp, '>$1>')
       .replace(uncommonNameRegExp, ' >$1>')
+      .replace(phoneRegExp, '>$1>')
       .replace(/>(.*?) >/g, '>$1> ');
     _.each(contractions, v => {
       this.normalized = this.normalized.replace(v[0], v[1]);
@@ -60,7 +62,7 @@ class Sentence extends Plugin {
 
   tokenize() {
     this.tokenized = [].concat.apply([], this.normalized.split('>').map(function(v,i){
-      return i%2 ? v : v.split(' ')
+      return i%2 ? v.trim() : v.split(' ')
     })).filter(Boolean);
     return this;
   }
@@ -149,13 +151,20 @@ class Sentence extends Plugin {
   }
 
   isYesNoQuestion() {
+    if(!this.getMainClause() || !this.getMainClause().tagged[0].tags.current) {
+      return false;
+    }
     return this.isQuestion() && !!this.getMainClause().tagged[0].tags.current.match(/(MD|VB)/gi);
   }
 
   isImperativeMood() {
+    let mainClause = this.getMainClause();
+    if(!mainClause) {
+      return false;
+    }
     return !this.isQuestion() && (
-      this.getMainClause().tagged[0].tags.current === 'VB' ||
-      (this.getMainClause().tagged[0].tags.current === 'RB' && this.getMainClause().tagged[1].tags.current === 'VB')
+      mainClause.tagged[0].tags.current === 'VB' ||
+      (mainClause.tagged.length > 1 && mainClause.tagged[0].tags.current === 'RB' && this.getMainClause().tagged[1].tags.current === 'VB')
     );
   }
 

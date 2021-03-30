@@ -2373,7 +2373,8 @@ const patterns = {
     [/^TO/, /^VB/],
     [/^MD/, /^VB/],
     [/^CD/, /^NNS/],
-    [/^VB/, /^NN/]
+    [/^VB/, /^NN/],
+    [/^MD/, /^BE/]
   ],
   3: [
     [/^IN/, /^AT/, /^NN/],
