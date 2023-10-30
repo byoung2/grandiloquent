@@ -75,7 +75,6 @@ describe('Sentence', () => {
     it('should recognize phone number as a single token', function () {
       var sentence = grandiloquent.sentence('My phone number is (310) 123-4567');
       sentence.tagged.should.be.an('array');
-      console.log(' normalized', sentence.tagged[4])
       sentence.tagged.should.have.lengthOf(5);
       sentence.tagged[4].should.have.property('word', '(310) 123-4567');
     });
@@ -83,7 +82,6 @@ describe('Sentence', () => {
     it('should recognize email as a single token', function () {
       var sentence = grandiloquent.sentence('My email address is user@host.com');
       sentence.tagged.should.be.an('array');
-      console.log(' normalized', sentence.tagged[4])
       sentence.tagged.should.have.lengthOf(5);
       sentence.tagged[4].should.have.property('word', 'user@host.com');
     });
@@ -207,67 +205,94 @@ describe('Sentence', () => {
     });
 
     it('should identify the subject phrase', () => {
-      let verb = grandiloquent
+      let subject = grandiloquent
         .sentence('Fortunately most doctors agree that diet and exercise are good for your health.')
         .getSubjectPhrase()
         .toString();
-      verb.should.be.a.string;
-      verb.should.equal('most doctors');
+      subject.should.be.a.string;
+      subject.should.equal('most doctors');
     });
 
     it('should identify the subject-verb phrase', () => {
-      let verb = grandiloquent
+      let subject = grandiloquent
         .sentence('I cannot understand why you called Uber to pick me up.')
         .getSubjectVerbPhrase()
         .toString();
-      verb.should.not.be.null;
-      verb.should.be.a.string;
-      verb.should.equal('I can not understand');
+      subject.should.not.be.null;
+      subject.should.be.a.string;
+      subject.should.equal('I can not understand');
     });
 
     it('should identify the subject-verb phrase', () => {
-      let verb = grandiloquent
+      let subject = grandiloquent
         .sentence('Most doctors reluctantly agree that diet and exercise are good for your health.')
         .getSubjectVerbPhrase()
         .toString();
-      verb.should.be.a.string;
-      verb.should.equal('Most doctors reluctantly agree');
+      subject.should.be.a.string;
+      subject.should.equal('Most doctors reluctantly agree');
     });
 
     it('should identify the predicate adjective phrase', () => {
-      let verb = grandiloquent
+      let phrase = grandiloquent
         .sentence('I am extremely angry at you.')
         .getPredicateAdjective()
         .toString();
-      verb.should.be.a.string;
-      verb.should.equal('extremely angry');
+      phrase.should.be.a.string;
+      phrase.should.equal('extremely angry');
     });
 
     it('should identify the predicate noun phrase', () => {
-      let verb = grandiloquent
+      let phrase = grandiloquent
         .sentence('I am just a simple farmer.')
         .getPredicateNoun()
         .toString();
-      verb.should.be.a.string;
-      verb.should.equal('just a simple farmer');
+      phrase.should.be.a.string;
+      phrase.should.equal('just a simple farmer');
     });
 
     it('should identify the predicate noun phrase', () => {
-      let verb = grandiloquent
+      let phrase = grandiloquent
         .sentence('Give me a break.')
         .getPredicateNoun()
         .toString();
-      verb.should.be.a.string;
-      verb.should.equal('me');
+      phrase.should.be.a.string;
+      phrase.should.equal('me');
     });
 
     it('should identify the predicate noun phrase', () => {
-      let verb = grandiloquent
+      let phrase = grandiloquent
         .sentence('tell me what you think.')
         .getPredicateNoun()
         .toString();
-      verb.should.be.a.string;
-      verb.should.equal('me what you think');
+      phrase.should.be.a.string;
+      phrase.should.equal('me what you think');
+    });
+
+    it('should identify the direct object of a verb', () => {
+      let object = grandiloquent
+        .sentence('I will walk the dog.')
+        .getDirectObjectPhrase()
+        .toString();
+      object.should.be.a.string;
+      object.should.equal('the dog');
+    });
+
+    it('should identify the indirect object of a verb', () => {
+      let object = grandiloquent
+        .sentence('I will give the dog a bath.')
+        .getIndirectObjectPhrase()
+        .toString();
+      object.should.be.a.string;
+      object.should.equal('the dog');
+    });
+
+    it('should identify the direct object of a verb when an indirect object is present', () => {
+      let object = grandiloquent
+        .sentence('I will give the dog a bath.')
+        .getDirectObjectPhrase()
+        .toString();
+      object.should.be.a.string;
+      object.should.equal('a bath');
     });
   });
 

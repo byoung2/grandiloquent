@@ -97,7 +97,7 @@ const lexicon = {
   of: ['IN','MD'],
   and: ['CC'],
   to: ['IN','TO','RB'],
-  a: ['AT','NN','IN'],
+  a: ['AT','IN'],
   in: ['IN','RB'],
   is: ['VBZ'],
   you: ['PRP','PPSS'],

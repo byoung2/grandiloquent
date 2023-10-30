@@ -438,6 +438,54 @@ class Sentence extends Plugin {
     return new Sentence(words);
   }
 
+  getNounObjects() {
+    let verb = this.getMainVerb();
+    let rest = this.tagged.slice(verb.index + 1);
+    let firstNonSubjectNoun = _.find(rest, item => {
+      return item.tags.current && item.tags.current.match(/^(N|P)/g);
+    });
+    let secondNonSubjectNoun = _.find(this.tagged, item => {
+      return item.tags.current && item.tags.current.match(/^(N|P)/g);
+    }, firstNonSubjectNoun.index + 1);
+    let nounObjects = [];
+    if(firstNonSubjectNoun) {
+      nounObjects.push(firstNonSubjectNoun);
+      if(secondNonSubjectNoun) {
+        nounObjects.push(secondNonSubjectNoun);
+      }
+    }
+    return nounObjects;
+  }
+
+  getDirectObjectPhrase() {
+    let verb = this.getMainVerb();
+    let nounObjects = this.getNounObjects();
+    let words;
+    if(nounObjects.length === 2) {
+      words = this.tagged.slice(nounObjects[0].index + 1, nounObjects[1].index + 1);
+    } else if(nounObjects.length === 1) {
+      words = this.tagged.slice(verb.index + 1, nounObjects[0].index + 1);
+    }
+    
+    if(!words.length) {
+      return new Sentence('');
+    }
+    return new Sentence(words);
+  }
+
+  getIndirectObjectPhrase() {
+    let verb = this.getMainVerb();
+    let nounObjects = this.getNounObjects();
+    let words;
+    if(nounObjects.length === 2) {
+      words = this.tagged.slice(verb.index + 1, nounObjects[0].index + 1);
+    }
+    if(!words.length) {
+      return new Sentence('');
+    }
+    return new Sentence(words);
+  }
+
   prepend(string) {
     let input = this.input;
     if(!_.first(this.tagged).tags.current.match(/^NNP/) && !input.match(/^i/i)) {
