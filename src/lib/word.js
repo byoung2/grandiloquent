@@ -13,7 +13,10 @@ class Word extends Plugin {
         current: null
       });
       this.meta = _.defaultsDeep(word.meta, {
-        reason: null
+        reason: null,
+        tags: {
+          current: 'NN'
+        }
       });
     } else {
       super(word);
@@ -41,6 +44,10 @@ class Word extends Plugin {
         this.tags.current = this.tags.all[0];
         this.meta.pos = partsOfSpeech.tags[this.tags.current];
         this.meta.reason = 'default';
+      }
+      if(!this.meta.reason) {
+        console.log('no reason')
+        this.tags.current = 'NN';
       }
     }
   }

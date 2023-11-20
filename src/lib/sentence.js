@@ -4,12 +4,19 @@ const contractions = require('./../data/contractions.js');
 const partsOfSpeech = require('./../data/partsOfSpeech.js');
 const nameGenders = require('./../data/nameGenders.js');
 const Verb = require('./verb.js');
-const Pronoun = require('./pronoun.js');
 const Noun = require('./noun.js');
 const Word = require('./word.js');
+const mathjs = require('mathjs');
+const extractDate = require('extract-date').default;
+console.log(extractDate)
 
 class Sentence extends Plugin {
-  constructor(string) {
+  constructor(string, lexicon = null) {
+    if(lexicon) {
+      _.forEach(lexicon, (v, k) => {
+        partsOfSpeech.lexicon[k] = v;
+      });
+    }
     if(_.isArray(string)) {
       let joined = string
         .map(item => {
@@ -48,15 +55,19 @@ class Sentence extends Plugin {
     let nameRegExp = new RegExp(`((${ Object.keys(nameGenders).map(_.capitalize).join('|') })( |\b)([A-Z][a-zA-Z]+?( |\b))+)`, 'g');
     let uncommonNameRegExp = new RegExp(` ([A-Z][a-zA-Z]+?( |\b)([A-Z][a-zA-Z]+?( |\b))+)`, 'g');
     let phoneRegExp = new RegExp(`([+]?1? ?[(]?[0-9]{3}[)-. ]? ?[0-9]{3}[. -]?[0-9]{4})`, 'g');
+    let numberWithUnits = new RegExp(`([0-9,.-]+ (sqft|meter|inch|foot|cm|mm|yard|mile))`, 'g');
+    let dates = extractDate(this.input, {direction: 'MDY', locale: 'en'});
     this.normalized = this.input
       .replace(/([,;:?.]+)( |$)/g, ' $1 ')
       .replace(nameRegExp, '>$1>')
       .replace(uncommonNameRegExp, ' >$1>')
       .replace(phoneRegExp, '>$1>')
+      .replace(numberWithUnits, '>$1>')
       .replace(/>(.*?) >/g, '>$1> ');
     _.each(contractions, v => {
       this.normalized = this.normalized.replace(v[0], v[1]);
     });
+    
     return this;
   }
 
@@ -140,6 +151,13 @@ class Sentence extends Plugin {
         item.tags.current = item.tags.all[0];
         item.meta.pos = partsOfSpeech.tags[item.tags.current];
         item.meta.reason = 'default';
+      }
+      if(item.tags.current === 'CD') {
+        try {
+          item.meta.numberWithUnits = mathjs.unit(item.word);
+        } catch(e) {
+
+        }
       }
       return Word.instance(item);
     });
@@ -442,14 +460,15 @@ class Sentence extends Plugin {
     let verb = this.getMainVerb();
     let rest = this.tagged.slice(verb.index + 1);
     let firstNonSubjectNoun = _.find(rest, item => {
-      return item.tags.current && item.tags.current.match(/^(N|P)/g);
+      return item.tags.current && item.tags.current.match(/^(N|P)/g) && !item.tags.current.match(/\$/g);
     });
-    let secondNonSubjectNoun = _.find(this.tagged, item => {
-      return item.tags.current && item.tags.current.match(/^(N|P)/g);
-    }, firstNonSubjectNoun.index + 1);
+    
     let nounObjects = [];
     if(firstNonSubjectNoun) {
       nounObjects.push(firstNonSubjectNoun);
+      let secondNonSubjectNoun = _.find(this.tagged, item => {
+        return item.tags.current && item.tags.current.match(/^(N|P)/g) && !item.tags.current.match(/\$/g);
+      }, firstNonSubjectNoun.index + 1);
       if(secondNonSubjectNoun) {
         nounObjects.push(secondNonSubjectNoun);
       }
@@ -467,7 +486,7 @@ class Sentence extends Plugin {
       words = this.tagged.slice(verb.index + 1, nounObjects[0].index + 1);
     }
     
-    if(!words.length) {
+    if(!words || !words.length) {
       return new Sentence('');
     }
     return new Sentence(words);
@@ -480,7 +499,7 @@ class Sentence extends Plugin {
     if(nounObjects.length === 2) {
       words = this.tagged.slice(verb.index + 1, nounObjects[0].index + 1);
     }
-    if(!words.length) {
+    if(!words || !words.length) {
       return new Sentence('');
     }
     return new Sentence(words);
@@ -635,7 +654,7 @@ class Sentence extends Plugin {
   }
 }
 
-module.exports.instance = (string) => {
-  return new Sentence(string);
+module.exports.instance = (string, lexicon = null) => {
+  return new Sentence(string, lexicon);
 };
 module.exports.model = Sentence;

@@ -46,6 +46,36 @@ describe('Sentence', () => {
       sentence.tagged[0].should.have.deep.property('tags.current', 'NP');
     });
 
+    it('should recognize unknown words as noun', () => {
+      let sentence = grandiloquent
+        .sentence('I drive a minivan to work.');
+      sentence.tagged.should.be.an('array');
+      sentence.tagged.should.have.lengthOf(7);
+      sentence.tagged[3].should.have.property('word', 'minivan');
+      sentence.tagged[3].should.have.deep.property('tags.current', 'NN');
+    });
+
+    it('should accept new entries to lexicon', () => {
+      let sentence = grandiloquent
+        .sentence("I'm going to drax them sklounst.", {
+          drax: ['VB'],
+          sklounst: ['JJ']
+        });
+      sentence.tagged.should.be.an('array');
+      sentence.tagged.should.have.lengthOf(8);
+      sentence.tagged[4].should.have.property('word', 'drax');
+      sentence.tagged[4].should.have.deep.property('tags.current', 'VB');
+    });
+
+    it('should recognize -way words as possible noun', () => {
+      let sentence = grandiloquent
+        .sentence('I parked in the driveway.');
+      sentence.tagged.should.be.an('array');
+      sentence.tagged.should.have.lengthOf(6);
+      sentence.tagged[4].should.have.property('word', 'driveway');
+      sentence.tagged[4].should.have.deep.property('tags.current', 'NN');
+    });
+
     it('should not recognize capital words start of the sentence as proper names', () => {
       let sentence = grandiloquent
         .sentence('Meet John Connor who is the leader of the resistance.');
@@ -79,11 +109,39 @@ describe('Sentence', () => {
       sentence.tagged[4].should.have.property('word', '(310) 123-4567');
     });
 
+    it.skip('should recognize date as a single token', function () {
+      var sentence = grandiloquent.sentence('My birthday is on 12/30/1980.');
+      sentence.tagged.should.be.an('array');
+      sentence.tagged.should.have.lengthOf(6);
+      sentence.tagged[4].should.have.property('word', '12/30/1980');
+    });
+
+    it.skip('should recognize date as a single token', function () {
+      var sentence = grandiloquent.sentence('My birthday is on February 3rd, 1980.');
+      sentence.tagged.should.be.an('array');
+      sentence.tagged.should.have.lengthOf(6);
+      sentence.tagged[4].should.have.property('word', '2/3/1980');
+    });
+
     it('should recognize email as a single token', function () {
       var sentence = grandiloquent.sentence('My email address is user@host.com');
       sentence.tagged.should.be.an('array');
       sentence.tagged.should.have.lengthOf(5);
       sentence.tagged[4].should.have.property('word', 'user@host.com');
+    });
+
+    it('should recognize number with units as a single token', function () {
+      var sentence = grandiloquent.sentence('I have a 1000 cm rope');
+      sentence.tagged.should.be.an('array');
+      sentence.tagged.should.have.lengthOf(5);
+      sentence.tagged[3].should.have.property('word', '1000 cm');
+    });
+
+    it('should recognize number with units as a single token', function () {
+      var sentence = grandiloquent.sentence('I have a 1000 sqft house');
+      sentence.tagged.should.be.an('array');
+      sentence.tagged.should.have.lengthOf(5);
+      sentence.tagged[3].should.have.property('word', '1000 sqft');
     });
   });
 
@@ -275,6 +333,15 @@ describe('Sentence', () => {
         .toString();
       object.should.be.a.string;
       object.should.equal('the dog');
+    });
+
+    it('should return empty string for nonexistent indirect object', () => {
+      let object = grandiloquent
+        .sentence('I will walk my dog.')
+        .getIndirectObjectPhrase()
+        .toString();
+      object.should.be.a.string;
+      object.should.equal('');
     });
 
     it('should identify the indirect object of a verb', () => {

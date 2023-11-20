@@ -580,6 +580,7 @@ const lexicon = {
   plan: ['NN','VB'],
   store: ['NN','VB'],
   tax: ['NN','VB'],
+  wax: ['NN','VB'],
   analysis: ['NN'],
   cold: ['JJ','NN','RB'],
   commercial: ['JJ','NN'],
@@ -2364,6 +2365,7 @@ const lexicon = {
   miswords: ['NNS','VBZ'],
   reword: ['NN','VB'],
   rewords: ['NNS','VBZ'],
+  minivan: ['NN'],
 };
 
 const patterns = {
@@ -2472,7 +2474,7 @@ module.exports = {
       pos.push('NP');
     } else if(word.match(/(home)$/i)) {
       pos.push('NN','VB');
-    } else if(word.match(/(er)$/i)) {
+    } else if(word.match(/(er|way)$/i)) {
       pos.push('NN');
     } else if(word.match(/(rs)$/i)) {
       pos.push('NNS');
