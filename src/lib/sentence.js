@@ -14,9 +14,9 @@ class Sentence extends Plugin {
     if(lexicon) {
       _.forEach(lexicon, (v, k) => {
         if(partsOfSpeech.lexicon[k]) {
-          _.uniq(partsOfSpeech.lexicon[k] = partsOfSpeech.lexicon[k].concat(v));
+          partsOfSpeech.lexicon[k] = _.uniq(partsOfSpeech.lexicon[k].concat(v));
         } else {
-          partsOfSpeech.lexicon[k] = v;
+          partsOfSpeech.lexicon[k] = _.uniq(v);
         }
       });
     }

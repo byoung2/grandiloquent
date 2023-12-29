@@ -14,9 +14,6 @@ class Word extends Plugin {
       });
       this.meta = _.defaultsDeep(word.meta, {
         reason: null,
-        tags: {
-          current: 'NN'
-        }
       });
     } else {
       super(word);
