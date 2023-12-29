@@ -203,6 +203,13 @@ describe('Sentence', () => {
       sentence.hasSubordinateClause().should.be.true;
     });
 
+    it('should identify prepositional phrases', () => {
+      let sentence = grandiloquent
+        .sentence('The girl went camping in the forest.');
+      sentence.mapPrepositionalPhrases();
+      sentence.tagged[3].should.have.property('prepositionalPhrase', 'in the forest');
+    });
+
     it('should identify a subordinate clause at the start of the sentence', () => {
       let sentence = grandiloquent
         .sentence('When you came home, I was sleeping.');

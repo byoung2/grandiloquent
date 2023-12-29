@@ -268,6 +268,34 @@ class Sentence extends Plugin {
     }
   }
 
+  mapPrepositionalPhrases() {
+    //Start with a preposition
+    let prepositions = _.filter(this.tagged, item => {
+      return item.tags.current && item.tags.current.match(/^IN/g);
+    });
+    if(!prepositions) {
+      return [];
+    }
+    return prepositions.forEach(preposition => {
+      let phrase = [];
+      for(let i=preposition.index;i<this.tagged.length;i++) {
+        console.log(this.tagged[i])
+        if(i > preposition.index && this.tagged[i].tags.current && this.tagged[i].tags.current.match(/^(VB|IN|CC|\.)/g)) {
+          break;
+        }
+        phrase.push(this.tagged[i].input);
+      }
+      if(preposition.index > 0) {
+        this.tagged[preposition.index - 1].prepositionalPhrase = phrase.join(' ');
+      } else {
+        let index = phrase.slice(-1).index;
+        if(this.tagged[index + 1]) {
+          this.tagged[index + 1].prepositionalPhrase = phrase.join(' ');
+        }
+      }
+    });
+  }
+
   getMainVerb() {
     let verbs = _(this.tagged)
       .differenceBy(this.getSubordinateClause(), 'index')
