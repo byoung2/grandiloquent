@@ -2374,7 +2374,7 @@ const patterns = {
     [/^AT/, /^NN/],
     [/^TO/, /^VB/],
     [/^MD/, /^VB/],
-    [/^CD/, /^NNS/],
+    [/^CD/, /^NN/],
     [/^VB/, /^NN/],
     [/^MD/, /^BE/]
   ],
@@ -2383,10 +2383,11 @@ const patterns = {
     [/^IN/, /^RB/, /^VB/],
     [/^IN/, /^VB/, /^RB/],
     [/^ABL/, /^AT/, /^JJ/],
-    [/^ABL/, /^JJ/, /^NNS/],
+    [/^ABL/, /^JJ/, /^NN/],
     [/^CC/, /^PRP/, /^VB/],
     [/^PP\$/, /^NN/, /^VBZ/],
-    [/^IN/, /^(JJ|NN)/, /^NN/]
+    [/^IN/, /^(JJ|NN)/, /^NN/],
+    [/^VB/, /^CC/, /^VB/]
   ],
   4: [
     [/^CC/, /^PRP/, /^VB/, /^IN/],

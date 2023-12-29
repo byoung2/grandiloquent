@@ -8,13 +8,16 @@ const Noun = require('./noun.js');
 const Word = require('./word.js');
 const mathjs = require('mathjs');
 const extractDate = require('extract-date').default;
-console.log(extractDate)
 
 class Sentence extends Plugin {
   constructor(string, lexicon = null) {
     if(lexicon) {
       _.forEach(lexicon, (v, k) => {
-        partsOfSpeech.lexicon[k] = v;
+        if(partsOfSpeech.lexicon[k]) {
+          _.uniq(partsOfSpeech.lexicon[k] = partsOfSpeech.lexicon[k].concat(v));
+        } else {
+          partsOfSpeech.lexicon[k] = v;
+        }
       });
     }
     if(_.isArray(string)) {
@@ -55,7 +58,7 @@ class Sentence extends Plugin {
     let nameRegExp = new RegExp(`((${ Object.keys(nameGenders).map(_.capitalize).join('|') })( |\b)([A-Z][a-zA-Z]+?( |\b))+)`, 'g');
     let uncommonNameRegExp = new RegExp(` ([A-Z][a-zA-Z]+?( |\b)([A-Z][a-zA-Z]+?( |\b))+)`, 'g');
     let phoneRegExp = new RegExp(`([+]?1? ?[(]?[0-9]{3}[)-. ]? ?[0-9]{3}[. -]?[0-9]{4})`, 'g');
-    let numberWithUnits = new RegExp(`([0-9,.-]+ (sqft|meter|inch|foot|cm|mm|yard|mile))`, 'g');
+    let numberWithUnits = new RegExp(`([0-9,.-]+ (sqft|meter|inch|foot|cm|mm|yard|mile|gallon))`, 'g');
     let dates = extractDate(this.input, {direction: 'MDY', locale: 'en'});
     this.normalized = this.input
       .replace(/([,;:?.]+)( |$)/g, ' $1 ')
