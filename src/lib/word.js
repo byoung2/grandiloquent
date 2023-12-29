@@ -43,7 +43,6 @@ class Word extends Plugin {
         this.meta.reason = 'default';
       }
       if(!this.meta.reason) {
-        console.log('no reason')
         this.tags.current = 'NN';
       }
     }

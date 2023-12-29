@@ -279,7 +279,6 @@ class Sentence extends Plugin {
     return prepositions.forEach(preposition => {
       let phrase = [];
       for(let i=preposition.index;i<this.tagged.length;i++) {
-        console.log(this.tagged[i])
         if(i > preposition.index && this.tagged[i].tags.current && this.tagged[i].tags.current.match(/^(VB|IN|CC|\.)/g)) {
           break;
         }
