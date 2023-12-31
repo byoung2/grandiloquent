@@ -76,6 +76,15 @@ describe('Sentence', () => {
       sentence.tagged[4].should.have.deep.property('tags.current', 'NN');
     });
 
+    it('should tag words in order of precedence', () => {
+      let sentence = grandiloquent
+        .sentence('Deliver a couch to Los Angeles.');
+      sentence.tagged.should.be.an('array');
+      sentence.tagged.should.have.lengthOf(6);
+      sentence.tagged[1].should.have.property('word', 'a');
+      sentence.tagged[1].should.have.deep.property('tags.current', 'AT');
+    });
+
     it('should not recognize capital words start of the sentence as proper names', () => {
       let sentence = grandiloquent
         .sentence('Meet John Connor who is the leader of the resistance.');

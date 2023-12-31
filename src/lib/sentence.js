@@ -122,33 +122,57 @@ class Sentence extends Plugin {
         }
       });
     });
+    let tagResults = [];
     _.each([5,4,3,2], (nGramCount) => {
       _.each(this.nGrams(nGramCount), nGrams => {
+        //TODO: weight patterns by frequency of occurance
         let patterns = partsOfSpeech.patterns[nGramCount];
         _.each(patterns, (pattern) => {
           let match = 0;
           let pos = {};
           _.each(pattern, (regex, k) => {
-            if(_.find(nGrams[k].tags.all, (item) => {
-              pos[nGrams[k].index] = item;
+            /*
+             * TODO: weight tags by frequency of occurance, e.g. to is a preposition (to the moon) more often 
+             * than it is an adverb (he came to after fainting). A pattern that matches with the preposition is 
+             * more likely than one that matches it as an adverb
+             */
+            let foundIndex = _.findIndex(nGrams[k].tags.all, (item) => {
+              pos[nGrams[k].index] = {
+                index: 99,
+                item,
+              };
               return item.match(regex);
-            })) {
+            });
+            if(foundIndex > -1) {
+              pos[nGrams[k].index].index = foundIndex;
               match++;
             }
           });
           if(match == nGramCount) {
-            _.each(pos, (v,k) => {
-              if(!this.tagged[k].tags.current || this.tagged[k].meta.reason !== 'pattern') {
-                this.tagged[k].tags.current = v;
-                this.tagged[k].meta.pos = partsOfSpeech.tags[v];
-                this.tagged[k].meta.reason = 'pattern';
-                this.tagged[k].meta.pattern = pos;
-              }
+            tagResults.push({
+              pos,
+              score: _.sumBy(Object.values(pos), item => {
+                return item.index;
+              })
             });
           }
         });
       });
     });
+    tagResults = _.sortBy(tagResults, ['score']);
+    tagResults.forEach((tagResult, k) => {
+      let pos = tagResult.pos;
+      _.each(pos, (v,k) => {
+        if(!this.tagged[k].tags.current || this.tagged[k].meta.reason !== 'pattern') {
+          this.tagged[k].tags.current = v.item;
+          this.tagged[k].meta.pos = partsOfSpeech.tags[v.item];
+          this.tagged[k].meta.reason = 'pattern';
+          this.tagged[k].meta.pattern = pos;
+          this.tagged[k].meta.score = tagResult.score;
+        }
+      });
+    });
+    
     this.tagged = this.tagged.map(item => {
       if(!item.tags.current && item.tags.all.length) {
         item.tags.current = item.tags.all[0];
