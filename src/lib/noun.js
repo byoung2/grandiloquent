@@ -24,7 +24,7 @@ class Noun extends Plugin {
     } else if(this.current.match(/(matr|vert|ind)(ix|ex)$/)) {
       this.current = this.current.replace(/x$/, 'ces');
     } else if(this.current.match(/(x|ch|ss|sh)$/)) {
-      this.current = this.current.concat('xes');
+      this.current = this.current.concat('es');
     } else if(this.current.match(/[aeiou]y$/)) {
       this.current = this.current.concat('s');
     } else if(this.current.match(/y$/)) {
